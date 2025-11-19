@@ -6,10 +6,13 @@ using static UnityEngine.UI.Image;
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement")]
-    public float moveSpeed;
+    private float moveSpeed;
 
     public float groundDrag;
 
+
+    bool isCrouched = false;
+    bool readyToCrouch = true;
 
     [Header("Sprinting")]
     public float walkSpeed = 7f;
@@ -21,14 +24,15 @@ public class PlayerMovement : MonoBehaviour
     public float jumpForce;
     public float jumpCooldown;
     public float airMultiplier;
+    public float crouchCooldown;
     bool readyToJump;
-
+   
     [Header("Extra Gravity")]
     public float extraFallGravity = 10f;   // tweak in Inspector
 
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
-
+    public KeyCode crouchKey = KeyCode.LeftControl;
     [Header("Ground Check")]
     public float playerHeight;
     public LayerMask whatIsGround;
@@ -60,6 +64,16 @@ public class PlayerMovement : MonoBehaviour
         
         MyInput();
         SpeedControl();
+        if (isCrouched && readyToCrouch)
+        {
+            transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y * 0.5f, transform.localScale.z);
+            readyToCrouch = false;
+        }
+        else if (!isCrouched && !readyToCrouch)
+        {
+            transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y * 2f, transform.localScale.z);
+            readyToCrouch = true;
+        }
 
         //handle drag
         if (grounded)
@@ -96,7 +110,24 @@ public class PlayerMovement : MonoBehaviour
 
             Invoke(nameof(ResetJump), jumpCooldown);
         }
+
+
+        if (Input.GetKeyDown(crouchKey))
+        {
+            if (isCrouched == true)
+            { 
+                isCrouched = false; 
+            }
+            else
+            { 
+                isCrouched = true; 
+            }
+                
+
+        }
+
     }
+
 
     private void FixedUpdate()
     {
@@ -153,6 +184,11 @@ public class PlayerMovement : MonoBehaviour
     private void ResetJump()
     {
         readyToJump = true;
+    }
+
+    private void ResetCrouch()
+    {
+        readyToCrouch = true;
     }
 
 }
