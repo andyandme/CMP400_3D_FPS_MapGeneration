@@ -6914,10 +6914,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 10
   groundDrag: 7
-  walkSpeed: 10
-  sprintSpeed: 17
+  walkSpeed: 15
+  sprintSpeed: 25
   sprintKey: 304
-  jumpForce: 10
+  jumpForce: 15
   jumpCooldown: 0.5
   airMultiplier: 0.9
   extraFallGravity: 20
