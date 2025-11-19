@@ -1,1 +1,8 @@
-/Library
+Library/
+Temp/
+obj/
+Build/
+Builds/
+Logs/
+MemoryCaptures/
+UserSettings/
