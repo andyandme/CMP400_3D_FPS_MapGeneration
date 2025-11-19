@@ -1,0 +1,86 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\andre\\OneDrive\\Desktop\\University Work\\Year 4\\CMP400-Honors-Project\\Artefact\\3D_FPS_Map_Generation\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{AFAB4885-A72A-1BC3-564E-7E6EA411DE25}|Assembly-CSharp.csproj|c:\\users\\andre\\onedrive\\desktop\\university work\\year 4\\cmp400-honors-project\\artefact\\3d_fps_map_generation\\assets\\scripts\\playermovement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AFAB4885-A72A-1BC3-564E-7E6EA411DE25}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\playermovement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AFAB4885-A72A-1BC3-564E-7E6EA411DE25}|Assembly-CSharp.csproj|c:\\users\\andre\\onedrive\\desktop\\university work\\year 4\\cmp400-honors-project\\artefact\\3d_fps_map_generation\\assets\\scripts\\movecamera.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AFAB4885-A72A-1BC3-564E-7E6EA411DE25}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\movecamera.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AFAB4885-A72A-1BC3-564E-7E6EA411DE25}|Assembly-CSharp.csproj|C:\\Users\\andre\\OneDrive\\Desktop\\University Work\\Year 4\\CMP400-Honors-Project\\Artefact\\3D_FPS_Map_Generation\\assets\\scripts\\playercam.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AFAB4885-A72A-1BC3-564E-7E6EA411DE25}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\playercam.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AFAB4885-A72A-1BC3-564E-7E6EA411DE25}|Assembly-CSharp.csproj|C:\\Users\\andre\\OneDrive\\Desktop\\University Work\\Year 4\\CMP400-Honors-Project\\Artefact\\3D_FPS_Map_Generation\\assets\\scripts\\fpsmapgenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AFAB4885-A72A-1BC3-564E-7E6EA411DE25}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\fpsmapgenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "PlayerMovement.cs",
+              "DocumentMoniker": "C:\\Users\\andre\\OneDrive\\Desktop\\University Work\\Year 4\\CMP400-Honors-Project\\Artefact\\3D_FPS_Map_Generation\\Assets\\Scripts\\PlayerMovement.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\PlayerMovement.cs",
+              "ToolTip": "C:\\Users\\andre\\OneDrive\\Desktop\\University Work\\Year 4\\CMP400-Honors-Project\\Artefact\\3D_FPS_Map_Generation\\Assets\\Scripts\\PlayerMovement.cs",
+              "RelativeToolTip": "Assets\\Scripts\\PlayerMovement.cs",
+              "ViewState": "AgIAACcAAAAAAAAAAAAAACsAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-18T23:13:38.425Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "MoveCamera.cs",
+              "DocumentMoniker": "C:\\Users\\andre\\OneDrive\\Desktop\\University Work\\Year 4\\CMP400-Honors-Project\\Artefact\\3D_FPS_Map_Generation\\Assets\\Scripts\\MoveCamera.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\MoveCamera.cs",
+              "ToolTip": "C:\\Users\\andre\\OneDrive\\Desktop\\University Work\\Year 4\\CMP400-Honors-Project\\Artefact\\3D_FPS_Map_Generation\\Assets\\Scripts\\MoveCamera.cs",
+              "RelativeToolTip": "Assets\\Scripts\\MoveCamera.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-18T22:54:18.455Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "PlayerCam.cs",
+              "DocumentMoniker": "C:\\Users\\andre\\OneDrive\\Desktop\\University Work\\Year 4\\CMP400-Honors-Project\\Artefact\\3D_FPS_Map_Generation\\Assets\\Scripts\\PlayerCam.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\PlayerCam.cs",
+              "ToolTip": "C:\\Users\\andre\\OneDrive\\Desktop\\University Work\\Year 4\\CMP400-Honors-Project\\Artefact\\3D_FPS_Map_Generation\\Assets\\Scripts\\PlayerCam.cs",
+              "RelativeToolTip": "Assets\\Scripts\\PlayerCam.cs",
+              "ViewState": "AgIAABsAAAAAAAAAAAAAACQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-18T22:16:54.926Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "FpsMapGenerator.cs",
+              "DocumentMoniker": "C:\\Users\\andre\\OneDrive\\Desktop\\University Work\\Year 4\\CMP400-Honors-Project\\Artefact\\3D_FPS_Map_Generation\\Assets\\Scripts\\FpsMapGenerator.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\FpsMapGenerator.cs",
+              "ToolTip": "C:\\Users\\andre\\OneDrive\\Desktop\\University Work\\Year 4\\CMP400-Honors-Project\\Artefact\\3D_FPS_Map_Generation\\Assets\\Scripts\\FpsMapGenerator.cs",
+              "RelativeToolTip": "Assets\\Scripts\\FpsMapGenerator.cs",
+              "ViewState": "AgIAAHkAAAAAAAAAAABBwJIAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-05T18:42:58.464Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
