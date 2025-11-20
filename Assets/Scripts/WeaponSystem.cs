@@ -7,10 +7,18 @@ using UnityEngine.UIElements;
 public class WeaponSystem : MonoBehaviour 
 {
 
+    [Header("Bullet Parts")]
+    public int projectileChildIndex = 0;
+    public int casingChildIndex = 1;
+
+    [Header("Casing Ejection")]
+    public float casingEjectForce = 3f;
+
     [Header("Refs")]
     public GameObject bullet;          
     public Transform firePoint;        
     public Transform aimTransform;     
+    public Transform casingPoint;
 
     [Header("Settings")]
     public float bulletSpeed = 200f;
@@ -49,17 +57,47 @@ public class WeaponSystem : MonoBehaviour
     void Shoot()
     {
 
+
         weaponCanFire = false;
+
         Quaternion spawnRot = firePoint.rotation * Quaternion.Euler(bulletRotationOffset);
         GameObject bulletClone = Instantiate(bullet, firePoint.position, spawnRot);
-
-        Rigidbody rb = bulletClone.GetComponent<Rigidbody>();
-        rb.linearVelocity = firePoint.forward * bulletSpeed;
         bulletClone.SetActive(true);
-        Destroy(bulletClone, 5f);
-        maxBullet--;
 
+
+        Transform projectileTf = bulletClone.transform.GetChild(projectileChildIndex);
+        Transform casingTf = bulletClone.transform.GetChild(casingChildIndex);
+
+     
+        projectileTf.SetParent(null);
+        casingTf.SetParent(null);
+
+        casingTf.position = casingPoint.position;
+        casingTf.rotation = casingPoint.rotation;
+
+
+        Destroy(bulletClone);
+
+        Rigidbody projRb = projectileTf.GetComponent<Rigidbody>();
+        Rigidbody casingRb = casingTf.GetComponent<Rigidbody>();
+
+
+        // fire projectile
+        projRb.linearVelocity = firePoint.forward * bulletSpeed;
+
+       
+        if (casingRb != null)
+        {
+            casingRb.linearVelocity = Vector3.zero;
+            casingRb.AddForce(casingPoint.right * casingEjectForce, ForceMode.Impulse);
+        }
+
+        Destroy(projectileTf.gameObject, 5f);
+        Destroy(casingTf.gameObject, 5f);
+
+        maxBullet--;
         StartCoroutine(CooldownTimer());
+
     }
 
     IEnumerator CooldownTimer()
