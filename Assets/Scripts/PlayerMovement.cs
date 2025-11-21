@@ -27,8 +27,7 @@ public class PlayerMovement : MonoBehaviour
     public float crouchCooldown;
     bool readyToJump;
    
-    [Header("Extra Gravity")]
-    public float extraFallGravity = 10f;   // tweak in Inspector
+
 
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
@@ -133,13 +132,6 @@ public class PlayerMovement : MonoBehaviour
     {
         MovePlayer();
 
-
-        // Extra gravity only when NOT grounded
-        if (!grounded)
-        {
-            // Accelerate downward
-            rb.AddForce(Vector3.down * extraFallGravity, ForceMode.Acceleration);
-        }
     }
 
 
@@ -163,7 +155,6 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector3 flatVel = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
 
-        //limit velocity if needed
         if (flatVel.magnitude > moveSpeed)
         { 
         

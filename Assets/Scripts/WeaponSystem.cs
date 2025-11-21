@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 
+
 public class WeaponSystem : MonoBehaviour 
 {
 
@@ -19,6 +20,7 @@ public class WeaponSystem : MonoBehaviour
     public Transform firePoint;        
     public Transform aimTransform;     
     public Transform casingPoint;
+    public GunVisuals gunVisuals;
 
     [Header("Settings")]
     public float bulletSpeed = 200f;
@@ -26,8 +28,8 @@ public class WeaponSystem : MonoBehaviour
     public float maxBullet = 10f;
 
     [Header("Offsets (relative to PlayerCam)")]
-    public Vector3 positionOffset = new Vector3(0.3f, -0.25f, 0.6f);
-    public Vector3 rotationOffset;
+    public Vector3 positionOffset; 
+   
 
     [Header("Bullet Visual Offset")]
  
@@ -35,19 +37,20 @@ public class WeaponSystem : MonoBehaviour
 
     bool weaponCanFire = true;
 
-    void LateUpdate()
+    void Update()
     {
-       
+
         if (aimTransform != null)
         {
-          
-            transform.position = aimTransform.position; //+ aimTransform.TransformDirection(positionOffset)
+
+            transform.position = aimTransform.position + aimTransform.TransformDirection(positionOffset); 
 
 
-            transform.rotation = aimTransform.rotation; //* Quaternion.Euler(rotationOffset)
+            transform.rotation = aimTransform.rotation; 
         }
 
-        
+        transform.position = aimTransform.position;
+        transform.rotation = aimTransform.rotation;
         if (Input.GetMouseButton(0) && maxBullet > 0 && weaponCanFire)
         {
             Shoot();
@@ -57,12 +60,12 @@ public class WeaponSystem : MonoBehaviour
     void Shoot()
     {
 
-
+        Debug.Log("Shoot() called");
         weaponCanFire = false;
 
         Quaternion spawnRot = firePoint.rotation * Quaternion.Euler(bulletRotationOffset);
         GameObject bulletClone = Instantiate(bullet, firePoint.position, spawnRot);
-        bulletClone.SetActive(true);
+        
 
 
         Transform projectileTf = bulletClone.transform.GetChild(projectileChildIndex);
@@ -75,11 +78,15 @@ public class WeaponSystem : MonoBehaviour
         casingTf.position = casingPoint.position;
         casingTf.rotation = casingPoint.rotation;
 
+        bulletClone.SetActive(true);
 
         Destroy(bulletClone);
 
         Rigidbody projRb = projectileTf.GetComponent<Rigidbody>();
         Rigidbody casingRb = casingTf.GetComponent<Rigidbody>();
+
+        if (gunVisuals != null)
+            gunVisuals.PlayShot();
 
 
         // fire projectile
@@ -92,10 +99,15 @@ public class WeaponSystem : MonoBehaviour
             casingRb.AddForce(casingPoint.right * casingEjectForce, ForceMode.Impulse);
         }
 
-        Destroy(projectileTf.gameObject, 5f);
-        Destroy(casingTf.gameObject, 5f);
+        Destroy(projectileTf.gameObject, 10f);
+        Destroy(casingTf.gameObject, 10f);
 
         maxBullet--;
+
+        if (maxBullet <= 0 && gunVisuals != null)
+            gunVisuals.SetEmptySlideBack();
+
+
         StartCoroutine(CooldownTimer());
 
     }
