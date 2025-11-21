@@ -3,24 +3,28 @@
   "WorkspaceRootPath": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|c:\\unityprojects\\cmp400_3d_fps_mapgeneration\\assets\\scripts\\gunvisuals.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\gunvisuals.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\playermovement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\playermovement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|c:\\unityprojects\\cmp400_3d_fps_mapgeneration\\assets\\scripts\\weaponsystem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\weaponsystem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\playercam.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\playercam.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\movecamera.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\movecamera.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\playercam.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\playercam.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\gunvisuals.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\gunvisuals.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|c:\\unityprojects\\cmp400_3d_fps_mapgeneration\\assets\\scripts\\fpsmapgenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\fpsmapgenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\weaponsystem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\weaponsystem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Library\\PackageCache\\com.unity.render-pipelines.universal@dcd8a2aecf3e\\Shaders\\Lit.shader||{3B902123-F8A7-4915-9F01-361F908088D0}",
@@ -30,28 +34,41 @@
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
-      "VerticalTabListWidth": 256,
+      "VerticalTabListWidth": 268,
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 4,
+              "Title": "FpsMapGenerator.cs",
+              "DocumentMoniker": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\FpsMapGenerator.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\FpsMapGenerator.cs",
+              "ToolTip": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\FpsMapGenerator.cs",
+              "RelativeToolTip": "Assets\\Scripts\\FpsMapGenerator.cs",
+              "ViewState": "AgIAAIYAAAAAAAAAAAAYwJMAAAA2AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-21T02:37:48.968Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "GunVisuals.cs",
               "DocumentMoniker": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\GunVisuals.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\GunVisuals.cs",
               "ToolTip": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\GunVisuals.cs",
               "RelativeToolTip": "Assets\\Scripts\\GunVisuals.cs",
-              "ViewState": "AgIAADUAAAAAAAAAAAAUwFIAAAAKAAAAAAAAAA==",
+              "ViewState": "AgIAADAAAAAAAAAAAAAAADcAAAADAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-21T00:24:40.455Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 1,
               "Title": "PlayerCam.cs",
               "DocumentMoniker": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\PlayerCam.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\PlayerCam.cs",
@@ -64,7 +81,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "MoveCamera.cs",
               "DocumentMoniker": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\MoveCamera.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\MoveCamera.cs",
@@ -77,20 +94,19 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 5,
               "Title": "WeaponSystem.cs",
               "DocumentMoniker": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\WeaponSystem.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\WeaponSystem.cs",
               "ToolTip": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\WeaponSystem.cs",
               "RelativeToolTip": "Assets\\Scripts\\WeaponSystem.cs",
-              "ViewState": "AgIAAGUAAAAAAAAAAAAUwHkAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAACYAAAAAAAAAAAAUwD4AAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-20T00:03:47.645Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-20T00:03:47.645Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "Lit.shader",
               "DocumentMoniker": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Library\\PackageCache\\com.unity.render-pipelines.universal@dcd8a2aecf3e\\Shaders\\Lit.shader",
               "RelativeDocumentMoniker": "Library\\PackageCache\\com.unity.render-pipelines.universal@dcd8a2aecf3e\\Shaders\\Lit.shader",
@@ -98,18 +114,17 @@
               "RelativeToolTip": "Library\\PackageCache\\com.unity.render-pipelines.universal@dcd8a2aecf3e\\Shaders\\Lit.shader",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002777|",
-              "WhenOpened": "2025-11-19T20:17:30.972Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-19T20:17:30.972Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "PlayerMovement.cs",
               "DocumentMoniker": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\PlayerMovement.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\PlayerMovement.cs",
               "ToolTip": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\PlayerMovement.cs",
               "RelativeToolTip": "Assets\\Scripts\\PlayerMovement.cs",
-              "ViewState": "AgIAAHwAAAAAAAAAAAAAADUAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAKcAAAAAAAAAAAAAALkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-19T19:48:15.003Z",
               "EditorCaption": ""

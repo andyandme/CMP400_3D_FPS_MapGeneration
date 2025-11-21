@@ -60,7 +60,6 @@ public class WeaponSystem : MonoBehaviour
     void Shoot()
     {
 
-        Debug.Log("Shoot() called");
         weaponCanFire = false;
 
         Quaternion spawnRot = firePoint.rotation * Quaternion.Euler(bulletRotationOffset);

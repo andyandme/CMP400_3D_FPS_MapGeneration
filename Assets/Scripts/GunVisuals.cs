@@ -6,9 +6,7 @@ public class GunVisuals : MonoBehaviour
     [Header("Refs")]
     public Transform triggerTf;
     public Transform slideTf;
-    public Transform magTf;
     public Transform recoilPivot;
-
 
 
     [Header("Trigger Move")]
@@ -29,7 +27,7 @@ public class GunVisuals : MonoBehaviour
     Vector3 triggerStart;
     Vector3 slideStart;
 
-    //Quaternion gunRotStart;
+  
 
     Coroutine recoilRoutine;
     Coroutine slideRoutine;
@@ -49,15 +47,12 @@ public class GunVisuals : MonoBehaviour
         { 
             slideStart = slideTf.localPosition;
         }
-
-        //gunRotStart = recoilPivot.localRotation;
     }
 
     // called each shot
     public void PlayShot()
     {
 
-        Debug.Log("PlayShot() called");
         if (triggerRoutine != null)
         { 
         StopCoroutine(triggerRoutine);
@@ -79,8 +74,6 @@ public class GunVisuals : MonoBehaviour
             slideRoutine = StartCoroutine(SlideKick(false));
         }
 
-
-        //gunRotStart = (recoilPivot != null ? recoilPivot.localRotation : transform.localRotation);
         recoilRoutine = StartCoroutine(RecoilKick());
        
 
