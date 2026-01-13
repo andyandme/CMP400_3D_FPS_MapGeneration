@@ -52,23 +52,153 @@ public class FpsMapGenerator : MonoBehaviour
     public TilePrefab[] tilePrefabs;
     public Transform mapParent;
 
- 
+    [Header("Cover Layer")]
+
+    public bool enableCoverLayer = true;
+    public TilePrefab[] coverPrefabs; // a seperate layer for the cover to be implemented
+    public Transform coverParent;
+    public Vector3 coverWorldOffset = Vector3.zero;
+
+
+    [Header("Seed")]
+    public bool useRandomSeed = false;
+    public int seed = 12345;
+
+
+    [Header("Regenerate")]
+    public bool generateOnStart = true;
+    public bool regenWithRkey = true;
+    private int lastUsedSeed;
+   
+
+
     private TileCode[,,] layout;                   // [x, z, level]
+    private TileCode[,,] coverLayout;              // [x, z, level]
     private Dictionary<int, GameObject> prefabLookup;
+    private Dictionary<int, GameObject> coverPrefabLookup;
 
-
+    private System.Random rng;
 
     private void Awake()
     {
         BuildPrefabLookup();
+        BuildCoverPrefabLookup();
+        EnsureCoverParent();
     }
 
     private void Start()
     {
+        if (generateOnStart)
+        {
+            Regenerate(); 
+        }
+        //AllocateLayout();
+        //InitializeLayoutManually();
+        //BuildGeometry();
+    }
+
+    private void Update()
+    {
+        if (regenWithRkey && Application.isPlaying && Input.GetKeyDown(KeyCode.R))
+        {
+            Regenerate();
+        }
+    }
+
+    [ContextMenu("Regenerate")]
+    public void Regenerate()
+    {
+        // Seed selection
+        if (useRandomSeed)
+        {
+            seed = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
+        }
+
+        lastUsedSeed = seed;
+        rng = new System.Random(lastUsedSeed);
+
+       
+        BuildPrefabLookup();
+        BuildCoverPrefabLookup();
+        EnsureCoverParent();
+
+
+
+        ClearSpawnedChildren(mapParent != null ? mapParent : transform);
+
+        if (enableCoverLayer)
+        {
+            ClearSpawnedChildren(coverParent != null ? coverParent : transform);
+        }
+
+        
         AllocateLayout();
         InitializeLayoutManually();
-        BuildGeometry();
+
+        if (enableCoverLayer)
+        {
+            AllocateCoverLayout();
+            InitializeCoverLayoutManually();
+
+        }
+
+
+        BuildGeometry(layout, mapParent != null ? mapParent : transform, prefabLookup, Vector3.zero);
+
+        if (enableCoverLayer)
+        {
+            BuildGeometry(coverLayout, coverParent, coverPrefabLookup, coverWorldOffset);
+        }
+
+        Debug.Log($"[FpsMapGenerator] Regenerated. Seed={lastUsedSeed} (useRandomSeed={useRandomSeed})");
     }
+
+    private void EnsureCoverParent()
+    {
+        if (!enableCoverLayer)
+        { 
+            return;
+        }
+        if (coverParent != null)
+        {
+            return;
+        }
+
+        Transform existing = transform.Find("CoverParent");
+
+        if (existing != null )
+        {
+            coverParent = existing;
+            return;
+        }
+
+        GameObject go = new GameObject("CoverParent");
+        go.transform.SetParent(transform, false);
+        coverParent = go.transform;
+
+    }
+
+    private void ClearSpawnedChildren(Transform parent)
+    {
+        if (parent == null)
+        {
+            return;
+        }
+
+        for (int i = parent.childCount - 1; i >= 0; i--)
+        {
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+                DestroyImmediate(parent.GetChild(i).gameObject);
+            else
+                Destroy(parent.GetChild(i).gameObject);
+#else
+            Destroy(parent.GetChild(i).gameObject);
+#endif
+        }
+    }
+
+
 
     private void AllocateLayout()
     {
@@ -87,6 +217,23 @@ public class FpsMapGenerator : MonoBehaviour
         }
     }
 
+    private void AllocateCoverLayout()
+    {
+        coverLayout = new TileCode[width, depth, levels];
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int z = 0; z < depth; z++)
+            {
+                for (int l = 0; l < levels; l++)
+                {
+                    coverLayout[x, z, l] = TileCode.Empty;
+                }
+            }
+        }
+    }
+
+
     private void BuildPrefabLookup()
     {
         if (prefabLookup == null)
@@ -94,12 +241,45 @@ public class FpsMapGenerator : MonoBehaviour
         else
             prefabLookup.Clear();
 
+        if (tilePrefabs == null) return;
+
         foreach (var entry in tilePrefabs)
         {
             if (entry == null) continue;
             if (entry.prefab == null) continue;
 
             prefabLookup[entry.groupId] = entry.prefab;
+        }
+    }
+
+    private void BuildCoverPrefabLookup()
+    {
+        if (coverPrefabLookup == null)
+        {
+            coverPrefabLookup = new Dictionary<int, GameObject>();
+        }
+        else 
+        {
+        coverPrefabLookup.Clear();
+        }
+
+        if (coverPrefabs == null)
+        { 
+            return; 
+        }
+
+        foreach (var entry in coverPrefabs)
+        {
+            if (entry == null)
+            { 
+                continue;
+            }
+
+            if (entry == null)
+            {
+                continue; 
+            }
+            coverPrefabLookup[entry.groupId] = entry.prefab;
         }
     }
 
@@ -140,62 +320,104 @@ public class FpsMapGenerator : MonoBehaviour
         // Level 0 (Ground)
         string[,] L0 =
         {
-        { "13W","11S","11S","11S","11S","11S","13S" }, //Closest to camera spawn (South Side)
-        { "11W","10" ,"10" ,"10" ,"10" ,"10" ,"11E" },
-        { "12W","5S" ,"13N","11N","15N","11" ,"11E" },
-        { "12W","100","15E","10" ,"15W","100","12E" },
-        { "11W","11S" ,"15S","11S","13S","5N" ,"12E" },
-        { "11W","10" ,"10" ,"10" ,"10" ,"10" ,"11E" },
-        { "13N","11N","11N","11N","11N","11N","13E" }, //Furthest from camera spawn (NorthSide)
-    };
+            { "13W","11S","11S","11S","11S","11S","13S" }, //Closest to camera spawn (South Side)
+            { "11W","10" ,"10" ,"10" ,"10" ,"10" ,"11E" },
+            { "12W","5S" ,"13N","11N","15N","11" ,"11E" },
+            { "12W","100","15E","10" ,"15W","100","12E" },
+            { "11W","11S" ,"15S","11S","13S","5N" ,"12E" },
+            { "11W","10" ,"10" ,"10" ,"10" ,"10" ,"11E" },
+            { "13N","11N","11N","11N","11N","11N","13E" }, //Furthest from camera spawn (NorthSide)
+        };
 
         // Level 1
         string[,] L1 =
         {
-        { "0" ,"0" ,"0" ,"0" ,"0" ,"0"  ,"0" },
-        { "0" ,"0" ,"0" ,"0" ,"0" ,"0"  ,"0" },
-        { "1E","20" ,"33W","31S","33S","100","1W" },
-        { "1E","30","30","20","30","30S","1W" },
-        { "1E" ,"100" ,"33","31","33E","20","1W" },
-        { "0" ,"0" ,"0" ,"0" ,"0" ,"0"  ,"0" },
-        { "0" ,"0" ,"0" ,"0" ,"0" ,"0"  ,"0" },
-    };
+            { "0" ,"0" ,"0" ,"0" ,"0" ,"0"  ,"0" },
+            { "0" ,"0" ,"0" ,"0" ,"0" ,"0"  ,"0" },
+            { "1E","20" ,"33W","31S","33S","100","1W" },
+            { "1E","30","30","20","30","30S","1W" },
+            { "1E" ,"100" ,"33","31","33E","20","1W" },
+            { "0" ,"0" ,"0" ,"0" ,"0" ,"0"  ,"0" },
+            { "0" ,"0" ,"0" ,"0" ,"0" ,"0"  ,"0" },
+        };
 
         // Level 2 (Left blanck for now)
         string[,] L2 =
         {
-        { "0","0","0","0","0","0","0" },
-        { "0","0","0","0","0","0","0" },
-        { "0","0","0","0","0","0","0" },
-        { "0","0","0","0","0","0","0" },
-        { "0","0","0","0","0","0","0" },
-        { "0","0","0","0","0","0","0" },
-        { "0","0","0","0","0","0","0" },
-    };
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","0","0","0","0" },
+        };
 
-        InitializeLayoutFromMatrices(L0, L1, L2);
+        InitializeLayoutFromMatrices(layout, L0, L1, L2);
     }
 
-
-    private void InitializeLayoutFromMatrices(string[,] level0, string[,] level1 = null, string[,] level2 = null)
+    private void InitializeCoverLayoutManually()
     {
+        string[,] C0 =
+        {
+            { "0","0","0","0","0","0","0" },//Closest to camera spawn (South Side)
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","0","0","0","0" },//Furthest from camera spawn (NorthSide)
+
+        };
+        string[,] C1 =
+        {
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","2","0","0","0" },
+            { "0","0","1","0","1","0","0" },
+            { "0","0","0","2","0","0","0" },
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","0","0","0","0" },
+        };
+        string[,] C2 =
+        {
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","0","0","0","0" },
+        };
+        InitializeLayoutFromMatrices(coverLayout, C0, C1, C2);
+    }
+
+    private void InitializeLayoutFromMatrices(TileCode[,,] target, string[,] level0, string[,] level1 = null, string[,] level2 = null)
+    {
+        if (target == null)
+        {
+            Debug.LogWarning("InitializeLayoutFromMatrices: target Layout id null");
+            return;
+        }
+
         // auto-size grid from L0
         int h = level0.GetLength(0);
         int w = level0.GetLength(1);
 
-        width = w;
-        depth = h;
-        levels = 3;
+     
+        //width = w;
+        //depth = h;
+        //levels = 3;
 
-        AllocateLayout(); // clears layout to empty with updated sizes
+        //AllocateLayout(); // clears layout to empty with updated sizes
 
         // copy each matrix into layout
-        CopyMatrixIntoLevel(level0, 0);
-        if (level1 != null) CopyMatrixIntoLevel(level1, 1);
-        if (level2 != null) CopyMatrixIntoLevel(level2, 2);
+        CopyMatrixIntoLevel(target, level0, 0);
+        if (level1 != null) CopyMatrixIntoLevel(target, level1, 1);
+        if (level2 != null) CopyMatrixIntoLevel(target, level2, 2);
     }
 
-    private void CopyMatrixIntoLevel(string[,] matrix, int level)
+    private void CopyMatrixIntoLevel(TileCode[,,] target, string[,] matrix, int level)
     {
         int rows = matrix.GetLength(0);
         int cols = matrix.GetLength(1);
@@ -207,7 +429,7 @@ public class FpsMapGenerator : MonoBehaviour
                 // matrix is [row, col] = [z, x]
                 string token = (matrix[r, c] ?? "").Trim();
                 var tile = ParseToken(token);
-                layout[c, r, level] = tile;
+                target[c, r, level] = tile;
             }
         }
     }
@@ -249,28 +471,25 @@ public class FpsMapGenerator : MonoBehaviour
         }
     }
 
-    private void BuildGeometry()
+    private void BuildGeometry(TileCode[,,] sourceLayout, Transform parent, Dictionary<int, GameObject> lookup, Vector3 worldOffset)
     {
-        Transform parent = mapParent != null ? mapParent : transform;
 
-        // Clear old children
-        for (int i = parent.childCount - 1; i >= 0; i--)
+        if (sourceLayout == null)
         {
-#if UNITY_EDITOR
-            if (!Application.isPlaying)
-                DestroyImmediate(parent.GetChild(i).gameObject);
-            else
-                Destroy(parent.GetChild(i).gameObject);
-#else
-            Destroy(parent.GetChild(i).gameObject);
-#endif
-        }
-
-        if (layout == null)
-        {
-            Debug.LogWarning("Layout is null, nothing to build.");
+            Debug.LogWarning("BuildGeometry: layout is null, nothing to build.");
             return;
         }
+        if (parent == null)
+        {
+            Debug.LogWarning("BuildGeometry: parent is null, nothing to build under.");
+            return;
+        }
+        if (lookup == null)
+        {
+            Debug.LogWarning("BuildGeometry: lookup is null.");
+            return;
+        }
+
 
         for (int x = 0; x < width; x++)
         {
@@ -278,13 +497,15 @@ public class FpsMapGenerator : MonoBehaviour
             {
                 for (int level = 0; level < levels; level++)
                 {
-                    TileCode tile = layout[x, z, level];
+                    TileCode tile = sourceLayout[x, z, level];
                     if (tile.IsEmpty) continue;
 
-                    if (!prefabLookup.TryGetValue(tile.group, out GameObject prefab))
-                        continue; // no prefab for this group id
+                    if (!lookup.TryGetValue(tile.group, out GameObject prefab))
+                    {
+                        continue;
+                    }
 
-                    Vector3 worldPos = GridToWorld(x, level, z);
+                    Vector3 worldPos = GridToWorld(x, level, z) + worldOffset;
                     Quaternion rot = GetRotationForDirection(tile.dir);
 
                     Instantiate(prefab, worldPos, rot, parent);
