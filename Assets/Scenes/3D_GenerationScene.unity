@@ -2862,6 +2862,13 @@ MonoBehaviour:
   depth: 10
   levels: 3
   moduleSize: 10
+  generationMode: 1
+  proceduralFloorGroupId: 10
+  keepBorderBlocked: 1
+  extraRooms: 8
+  RoomMaxSize: 4
+  corridorThickness: 1
+  drawWalkableDebug: 1
   tilePrefabs:
   - groupId: 10
     prefab: {fileID: 4159172804140198721, guid: a72697dea9a618a4f9872df506376b6d, type: 3}
@@ -2908,7 +2915,7 @@ MonoBehaviour:
     prefab: {fileID: 8083340089249959879, guid: db5c000b7e2febb4c950334c762e7799, type: 3}
   coverParent: {fileID: 454512499}
   coverWorldOffset: {x: 0, y: 0, z: 0}
-  useRandomSeed: 0
+  useRandomSeed: 1
   seed: 12345
   generateOnStart: 1
   regenWithRkey: 1
@@ -6166,13 +6173,13 @@ Transform:
   m_GameObject: {fileID: 1106827168}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5, z: 0.5}
+  m_LocalPosition: {x: 5, y: 28.1, z: 26}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1489773256}
   - {fileID: 170648181}
-  m_Father: {fileID: 1455099953}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1106827170
 MonoBehaviour:
@@ -7791,12 +7798,11 @@ Transform:
   m_GameObject: {fileID: 1455099952}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5, y: 4, z: 0}
+  m_LocalPosition: {x: 5, y: 26.6, z: 25.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1619613504}
-  - {fileID: 1106827169}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1464355172
@@ -14735,6 +14741,7 @@ SceneRoots:
   - {fileID: 1373753071}
   - {fileID: 1342429383}
   - {fileID: 1455099953}
+  - {fileID: 1106827169}
   - {fileID: 7482033120766528686}
   - {fileID: 1831908998233637213}
   - {fileID: 7474682262471155151}

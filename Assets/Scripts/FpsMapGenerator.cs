@@ -14,6 +14,13 @@ public class FpsMapGenerator : MonoBehaviour
         West
     }
 
+    public enum GenerationMode
+    { 
+    ManualMatrix, //Premade Maps 
+    ProceduralWalkable //Procedurally generated maps (just the floorplan)
+    
+    }
+
     [System.Serializable]
     public class TilePrefab
     {
@@ -48,6 +55,25 @@ public class FpsMapGenerator : MonoBehaviour
     public int levels = 3;          // 0 = ground, 1 = mid, 2 = top
     public float moduleSize = 10f;  // tile size in world units
 
+    [Header("Generation Mode")]
+    public GenerationMode generationMode = GenerationMode.ManualMatrix;
+
+    public int proceduralFloorGroupId = 10;
+    public bool keepBorderBlocked = true;
+
+    [Range(0, 50)]
+    public int extraRooms = 8;
+
+    [Range(1,6)]
+    public int RoomMaxSize = 4;
+
+    [Range(0, 2)]
+    public int corridorThickness = 1;
+
+    public bool drawWalkableDebug = true;
+
+
+
     [Header("Prefabs")]
     public TilePrefab[] tilePrefabs;
     public Transform mapParent;
@@ -74,6 +100,8 @@ public class FpsMapGenerator : MonoBehaviour
 
     private TileCode[,,] layout;                   // [x, z, level]
     private TileCode[,,] coverLayout;              // [x, z, level]
+    private bool[,] walkable;
+
     private Dictionary<int, GameObject> prefabLookup;
     private Dictionary<int, GameObject> coverPrefabLookup;
 
@@ -123,7 +151,7 @@ public class FpsMapGenerator : MonoBehaviour
         EnsureCoverParent();
 
 
-
+        //clear old children
         ClearSpawnedChildren(mapParent != null ? mapParent : transform);
 
         if (enableCoverLayer)
@@ -131,17 +159,34 @@ public class FpsMapGenerator : MonoBehaviour
             ClearSpawnedChildren(coverParent != null ? coverParent : transform);
         }
 
+        //Allocate map Layout and cover 
+
         
         AllocateLayout();
-        InitializeLayoutManually();
+       
 
         if (enableCoverLayer)
         {
             AllocateCoverLayout();
-            InitializeCoverLayoutManually();
-
         }
 
+        if (generationMode == GenerationMode.ManualMatrix)
+        {
+            InitializeLayoutManually();
+
+        }
+        else
+        {
+            walkable = GenerateWalkablePlan();
+            InitializeLayoutFromWalkable(walkable);
+        }
+
+        if (enableCoverLayer)
+        {
+            InitializeCoverLayoutManually();
+        }
+
+            
 
         BuildGeometry(layout, mapParent != null ? mapParent : transform, prefabLookup, Vector3.zero);
 
@@ -152,6 +197,168 @@ public class FpsMapGenerator : MonoBehaviour
 
         Debug.Log($"[FpsMapGenerator] Regenerated. Seed={lastUsedSeed} (useRandomSeed={useRandomSeed})");
     }
+
+    private bool[,] GenerateWalkablePlan()
+    {
+        bool[,] g = new bool[width, depth];
+
+        int minX = keepBorderBlocked ? 1 : 0;
+        int maxX = keepBorderBlocked ? width - 2 : width - 1;
+        int minZ = keepBorderBlocked ? 1 : 0;
+        int maxZ = keepBorderBlocked ? depth - 2 : depth - 1;
+
+        if (maxX < minX || maxZ < minZ)
+        {
+            Debug.LogWarning("Grid too small for keepBorderBlocked, DIsable keepBorderBlocked or increase width/depth ");
+            return g;
+        
+        }
+
+        int startX = rng.Next(minX, maxX + 1);
+        int endX = rng.Next(minX + 1);
+
+        int x = startX;
+        int z = minZ;
+
+        List<Vector2Int> pathCells = new List<Vector2Int>(width * depth);
+
+
+        while (z <= maxZ)
+        {
+           CarveThick(g, x, z, corridorThickness, minX, maxX, minZ, maxZ);
+            pathCells.Add(new Vector2Int(x, z));
+            
+            if (z == maxZ) break;
+
+            int dx = System.Math.Sign(endX - x);
+            int moveRoll = rng.Next(0, 100);
+
+            if (moveRoll < 60)
+            {
+                z++;
+            }
+            else if (moveRoll < 85 && dx != 0)
+            {
+                x = Mathf.Clamp(x + dx, minX, maxX);
+
+            }
+            else
+            { 
+            int dir = rng.Next(0,2) == 0 ? -1 : 1;
+            x = Mathf.Clamp(x + dir, minX, maxX);
+            }
+        }
+
+        for (int i = 0; i < extraRooms && pathCells.Count > 0; i++)
+        {
+            Vector2Int anchor = pathCells[rng.Next(0, pathCells.Count)];
+            int rw = rng.Next(2, RoomMaxSize + 1);
+            int rh = rng.Next(2, RoomMaxSize + 1);
+
+            int rx = Mathf.Clamp(anchor.x - rng.Next(0, rw), minX, maxX);
+            int rz = Mathf.Clamp(anchor.y - rng.Next(0,rh), minZ, maxZ);
+
+            CarveRect(g, rx, rz, rw, rh, minX, maxX, minZ, maxZ);
+        
+        }
+
+        return g;
+     
+    }
+
+    private void CarveThick(bool[,] g, int x, int z, int thickness, int minX, int maxX, int minZ, int maxZ)
+    {
+        int r = Mathf.Max(0, thickness);
+        for (int dz = -r; dz <= r; dz++)
+        {
+            for (int dx = -r; dx <= r; dx++)
+            {
+                int cx = x + dx;
+                int cz = z + dz;
+
+                if (cx < minX || cx > maxX || cz < minZ || cz > maxZ)
+                    continue;
+
+                g[cx, cz] = true;
+            }
+        }
+    }
+
+    private void CarveRect(bool[,] g, int x, int z, int w, int h, int minX, int maxX, int minZ, int maxZ)
+    {
+        for (int dz = 0; dz < h; dz++)
+        {
+            for (int dx = 0; dx < w; dx++)
+            { 
+            int cx = x + dx;
+            int cz = z + dz;
+                if (cx < minX || cx > maxX || cz < minZ || cz > maxZ)continue;
+                {
+                    
+                    g[cx, cz] = true;
+                    
+                }
+            
+            }
+        
+        }
+    
+    }
+
+    private void InitializeLayoutFromWalkable(bool[,] g)
+    {
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int z = 0; z < depth; z++)
+            {
+                if (g != null && g[x, z])
+                {
+                    layout[x, z, 0] = new TileCode(proceduralFloorGroupId, Direction.North);
+
+                }
+            
+            }
+        
+        }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (!drawWalkableDebug)
+        {
+            return;
+        }
+        if (generationMode != GenerationMode.ProceduralWalkable)
+        {
+            return;
+        }
+
+        if (walkable == null)
+        { 
+            return;
+        }
+
+        Gizmos.matrix = Matrix4x4.identity;
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int z = 0; z < depth; z++)
+            {
+
+                if (!walkable[x, z]) continue;
+
+                Vector3 p = GridToWorld(x, 0, z) + new Vector3(moduleSize * 0.5f, 0.2f, moduleSize * 0.5f);
+                Gizmos.DrawWireCube(p, new Vector3(moduleSize * 0.9f, 0.2f, moduleSize * 0.9f));
+
+
+            }
+        
+        }
+
+    
+    }
+
 
     private void EnsureCoverParent()
     {
