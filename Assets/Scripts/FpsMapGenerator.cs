@@ -73,6 +73,16 @@ public class FpsMapGenerator : MonoBehaviour
     public bool drawWalkableDebug = true;
 
 
+    [Header("Procedural: Bitmasking Walls")]
+    public int floorNoWallsGroupId = 10;
+    public int floorOneWallGroupId = 11; //N facing
+    public int floorTwoWallsOppositeGroupId = 12; //N+S facing walls at default
+    public int floorTwoWallsCornerGroupId = 13; //N+W facing by default
+    public int floorThreeWallsGroupId = 14;
+    public int floorFourWallsGroupId = 16;
+
+
+
 
     [Header("Prefabs")]
     public TilePrefab[] tilePrefabs;
@@ -307,21 +317,119 @@ public class FpsMapGenerator : MonoBehaviour
 
     private void InitializeLayoutFromWalkable(bool[,] g)
     {
+        if (g == null)
+        {
+            Debug.LogWarning("INitializeLayoutFromWalkable: walkable grid is null");
+        }
+        for (int x = 0; x < width; x++)
+        {
+            for (int z = 0; z < depth; z++)
+            {
+
+                    layout[x, z, 0] = TileCode.Empty;
+
+                
+            
+            }
+        
+        }
 
         for (int x = 0; x < width; x++)
         {
             for (int z = 0; z < depth; z++)
             {
-                if (g != null && g[x, z])
-                {
-                    layout[x, z, 0] = new TileCode(proceduralFloorGroupId, Direction.North);
+                if (!g[x, z])
+                    continue;
 
-                }
-            
+
+                bool n = IsWalkable(g, x, z + 1);
+                bool e = IsWalkable(g, x + 1, z);
+                bool s = IsWalkable(g, x, z - 1);
+                bool w = IsWalkable(g, x - 1, z);
+
+                bool wallN = !n;
+                bool wallE = !e;
+                bool wallS = !s;
+                bool wallW = !w;
+
+
+                int wallCount =
+                    (wallN ?  1: 0) + 
+                    (wallE ? 1 : 0) +
+                    (wallS ? 1 : 0) +
+                    (wallW ? 1 : 0);
+
+                TileCode tile = BuildTileFromWalls(wallN, wallE, wallS, wallW, wallCount);
+                layout[x, z, 0] = tile;
+
             }
-        
         }
     }
+
+    private bool IsWalkable(bool[,] g, int x, int z)
+    {
+        if (x < 0 || x >= width || z < 0 || z >= depth)
+            return false;
+        return g[x, z];
+    
+    }
+
+    private TileCode BuildTileFromWalls(bool wallN, bool wallE, bool wallS, bool wallW, int wallCount)
+    {
+        // 0 walls
+        if (wallCount == 0)
+        {
+            return new TileCode(floorNoWallsGroupId, Direction.North);
+        }
+
+        // 1 wall
+        if (wallCount == 1)
+        {
+            // One-wall prefab default: wall on North at Direction.North
+            if (wallN) return new TileCode(floorOneWallGroupId, Direction.North);
+            if (wallE) return new TileCode(floorOneWallGroupId, Direction.East);
+            if (wallS) return new TileCode(floorOneWallGroupId, Direction.South);
+            /*wallW*/
+            return new TileCode(floorOneWallGroupId, Direction.West);
+        }
+        // 2 walls
+        if (wallCount == 2)
+        {
+            bool opposite = (wallN && wallS) || (wallE && wallW);
+
+            if (opposite)
+            {
+                // Opposite-walls prefab default: walls on North + South
+                // If walls are E+W, rotate 90 degrees (Direction.East).
+                if (wallN && wallS) return new TileCode(floorTwoWallsOppositeGroupId, Direction.North);
+                /*wallE && wallW*/  return new TileCode(floorTwoWallsOppositeGroupId, Direction.East);
+            }
+            else
+            {
+                // Corner-walls prefab default: walls on North + West
+                // Rotate to match the two adjacent wall sides:
+                // NW = North, NE = East, ES = South, SW = West
+                if (wallN && wallW) return new TileCode(floorTwoWallsCornerGroupId, Direction.North); // N+W
+                if (wallN && wallE) return new TileCode(floorTwoWallsCornerGroupId, Direction.East);  // N+E
+                if (wallE && wallS) return new TileCode(floorTwoWallsCornerGroupId, Direction.South); // E+S
+                /*wallS && wallW*/  return new TileCode(floorTwoWallsCornerGroupId, Direction.West);  // S+W
+            }
+        }
+
+        // 3 walls
+        if (wallCount == 3)
+        {
+            // Three-walls prefab default: opening on North at Direction.North (walls E+S+W)
+            if (!wallN) return new TileCode(floorThreeWallsGroupId, Direction.North); // open to North
+            if (!wallE) return new TileCode(floorThreeWallsGroupId, Direction.East);  // open to East
+            if (!wallS) return new TileCode(floorThreeWallsGroupId, Direction.South); // open to South
+            /*open West*/return new TileCode(floorThreeWallsGroupId, Direction.West);
+        }
+
+        // 4 walls (usually you won't have these, but handle anyway)
+        return new TileCode(floorFourWallsGroupId, Direction.North);
+    }
+
 
     private void OnDrawGizmosSelected()
     {
@@ -580,9 +688,9 @@ public class FpsMapGenerator : MonoBehaviour
         {
             { "0","0","0","0","0","0","0" },
             { "0","0","0","0","0","0","0" },
-            { "0","0","0","2","0","0","0" },
+            { "0","0","0","2W","0","0","0" },
             { "0","0","1","0","1","0","0" },
-            { "0","0","0","2","0","0","0" },
+            { "0","0","0","2W","0","0","0" },
             { "0","0","0","0","0","0","0" },
             { "0","0","0","0","0","0","0" },
         };

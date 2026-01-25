@@ -7,16 +7,16 @@
       "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\fpsmapgenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\gunvisuals.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\gunvisuals.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\playercam.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\playercam.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\movecamera.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\movecamera.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\gunvisuals.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\gunvisuals.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\playermovement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -48,14 +48,14 @@
               "RelativeDocumentMoniker": "Assets\\Scripts\\FpsMapGenerator.cs",
               "ToolTip": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\FpsMapGenerator.cs",
               "RelativeToolTip": "Assets\\Scripts\\FpsMapGenerator.cs",
-              "ViewState": "AgIAAPUAAAAAAAAAAAAIwBUBAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAKgCAAAAAAAAAAASwMUCAABiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-21T02:37:48.968Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
               "Title": "GunVisuals.cs",
               "DocumentMoniker": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\GunVisuals.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\GunVisuals.cs",
@@ -63,11 +63,12 @@
               "RelativeToolTip": "Assets\\Scripts\\GunVisuals.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-21T00:24:40.455Z"
+              "WhenOpened": "2025-11-21T00:24:40.455Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "PlayerCam.cs",
               "DocumentMoniker": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\PlayerCam.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\PlayerCam.cs",
@@ -79,7 +80,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "MoveCamera.cs",
               "DocumentMoniker": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\MoveCamera.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\MoveCamera.cs",
