@@ -1,10 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TestTools;
 
 
 public class FpsMapGenerator : MonoBehaviour
 {
-//Deafult Direction for prefabs is north so North basically means None but kept for clarity
+
+    public System.Action OnMapRegenerated;
+    //Deafult Direction for prefabs is north so North basically means None but kept for clarity
     public enum Direction
     {
         None,
@@ -45,10 +48,13 @@ public class FpsMapGenerator : MonoBehaviour
         public static TileCode Empty => new TileCode(0, Direction.None);
     }
 
-   
+
     // Settings
     //-Hopefully fully editable for auto generated maps
-    
+    [Header("Procedural: Exterior Cull")]
+    [Range(0, 4)] public int minWalkableNeighborsToKeep = 2;  
+    [Range(0, 10)] public int exteriorCullIterations = 2;     
+
     [Header("Grid Settings")]
     public int width = 16;
     public int depth = 16;
@@ -96,6 +102,12 @@ public class FpsMapGenerator : MonoBehaviour
     public Vector3 coverWorldOffset = Vector3.zero;
 
 
+    [Header("Cover Layer Spawn Points")]
+    public int player1SpawnGroupId = 101;
+    public int player2SpawnGroupId = 102;
+    public int spawnLevel = 0;
+    public bool placeSpawnsForProcedural = true;
+
     [Header("Seed")]
     public bool useRandomSeed = false;
     public int seed = 12345;
@@ -116,6 +128,41 @@ public class FpsMapGenerator : MonoBehaviour
     private Dictionary<int, GameObject> coverPrefabLookup;
 
     private System.Random rng;
+
+    private bool IsFloorGroup(int group)
+    {
+        return group == floorNoWallsGroupId
+            || group == floorOneWallGroupId
+            || group == floorTwoWallsOppositeGroupId
+            || group == floorTwoWallsCornerGroupId
+            || group == floorThreeWallsGroupId
+            || group == floorFourWallsGroupId;
+    }
+
+    private int WalkableNeighborCount(bool[,] g, int x, int z)
+    {
+        int c = 0;
+        if (IsWalkable(g, x, z + 1)) c++;
+        if (IsWalkable(g, x + 1, z)) c++;
+        if (IsWalkable(g, x, z - 1)) c++;
+        if (IsWalkable(g, x - 1, z)) c++;
+        return c;
+    }
+
+    private bool IsValidSpawnCell(bool[,] g, int x, int z)
+    {
+        if (!IsWalkable(g, x, z)) return false;
+        if (layout == null) return false;
+
+        var t = layout[x, z, 0];
+        if (t.IsEmpty) return false;
+        if (!IsFloorGroup(t.group)) return false;
+
+       
+        if (WalkableNeighborCount(g, x, z) < 2) return false;
+
+        return true;
+    }
 
     private void Awake()
     {
@@ -188,17 +235,33 @@ public class FpsMapGenerator : MonoBehaviour
         else
         {
             walkable = GenerateWalkablePlan();
+            CullExteriorWalkable(walkable);
             InitializeLayoutFromWalkable(walkable);
         }
 
         if (enableCoverLayer)
         {
-            InitializeCoverLayoutManually();
+            if (generationMode == GenerationMode.ManualMatrix)
+            {
+
+                InitializeCoverLayoutManually();
+            }
+
+            if (generationMode == GenerationMode.ProceduralWalkable && placeSpawnsForProcedural)
+            {
+                PlaceSpawnPointsFromWalkable(walkable);
+            }
+
+        }
+        else
+            if (generationMode == GenerationMode.ProceduralWalkable && placeSpawnsForProcedural)
+        {
+            Debug.LogWarning("Spawn placement has been requested but enable coverlayer is false");
         }
 
-            
 
-        BuildGeometry(layout, mapParent != null ? mapParent : transform, prefabLookup, Vector3.zero);
+
+            BuildGeometry(layout, mapParent != null ? mapParent : transform, prefabLookup, Vector3.zero);
 
         if (enableCoverLayer)
         {
@@ -206,7 +269,210 @@ public class FpsMapGenerator : MonoBehaviour
         }
 
         Debug.Log($"[FpsMapGenerator] Regenerated. Seed={lastUsedSeed} (useRandomSeed={useRandomSeed})");
+
+
+        int subs = (OnMapRegenerated == null) ? 0 : OnMapRegenerated.GetInvocationList().Length;
+        Debug.Log($"[FpsMapGenerator] Invoking OnMapRegenerated. Subscribers={subs}");
+
+        OnMapRegenerated?.Invoke();
     }
+
+
+    private void CullExteriorWalkable(bool[,] g)
+    {
+        if (g == null) return;
+
+        for (int iter = 0; iter < exteriorCullIterations; iter++)
+        {
+            bool[,] next = (bool[,])g.Clone();
+            bool changed = false;
+
+            for (int x = 0; x < width; x++)
+            {
+                for (int z = 0; z < depth; z++)
+                {
+                    if (!g[x, z]) continue;
+
+                    int n =
+                        (IsWalkable(g, x, z + 1) ? 1 : 0) +
+                        (IsWalkable(g, x + 1, z) ? 1 : 0) +
+                        (IsWalkable(g, x, z - 1) ? 1 : 0) +
+                        (IsWalkable(g, x - 1, z) ? 1 : 0);
+
+                    
+                    if (n < minWalkableNeighborsToKeep)
+                    {
+                        next[x, z] = false;
+                        changed = true;
+                    }
+                }
+            }
+
+            // Apply
+            g = CopyGrid(next, g);
+
+            if (!changed) break;
+        }
+    }
+
+    private bool[,] CopyGrid(bool[,] src, bool[,] dst)
+    {
+        for (int x = 0; x < width; x++)
+            for (int z = 0; z < depth; z++)
+                dst[x, z] = src[x, z];
+        return dst;
+    }
+
+    private void PlaceSpawnPointsFromWalkable(bool[,] g)
+    {
+        if (g == null)
+        {
+            Debug.LogWarning("PlaceSpawnPointsFromWalkable: walkable grid is null");
+            return;
+        }
+        if (coverLayout == null)
+        {
+            Debug.LogWarning("PlaceSpawnPointsFromWalkable: coverLayout is null");
+            return;
+        }
+
+        ClearSpawnMarkersInCover();
+
+        List<Vector2Int> candidates = new List<Vector2Int>();
+        for (int x = 0; x < width; x++)
+        {
+            for (int z = 0; z < depth; z++)
+            {
+                if (IsValidSpawnCell(g, x, z))
+                    candidates.Add(new Vector2Int(x, z));
+            }
+        }
+
+        if (candidates.Count == 0)
+        {
+            Debug.LogWarning("[FpsMapGenerator] No valid spawn candidates found (walkable+floor). Check your floor group IDs / prefabs.");
+            return;
+        }
+
+        // Choose a start candidate, BFS to farthest VALID candidate A, then BFS from A to farthest VALID candidate B
+        Vector2Int start = candidates[rng.Next(0, candidates.Count)];
+
+        var bfs1 = BFSFarthestValidCandidate(g, start);
+        Vector2Int A = bfs1.farthest;
+
+        var bfs2 = BFSFarthestValidCandidate(g, A);
+        Vector2Int B = bfs2.farthest;
+
+        // Write markers
+        coverLayout[A.x, A.y, spawnLevel] = new TileCode(player1SpawnGroupId, Direction.North);
+        coverLayout[B.x, B.y, spawnLevel] = new TileCode(player2SpawnGroupId, Direction.North);
+
+        Debug.Log($"[FpsMapGenerator] Spawn cells chosen (floor-valid): P1={A}, P2={B}, dist={bfs2.farthestDist}");
+
+    }
+
+    private (Vector2Int farthest, int farthestDist) BFSFarthestValidCandidate(bool[,] g, Vector2Int start)
+    {
+        int[,] dist = new int[width, depth];
+        for (int x = 0; x < width; x++)
+            for (int z = 0; z < depth; z++)
+                dist[x, z] = -1;
+
+        Queue<Vector2Int> q = new Queue<Vector2Int>();
+
+        if (!IsWalkable(g, start.x, start.y))
+            return (start, 0);
+
+        dist[start.x, start.y] = 0;
+        q.Enqueue(start);
+
+        Vector2Int farthest = start;
+        int farthestDist = 0;
+
+        
+        while (q.Count > 0)
+        {
+            var cur = q.Dequeue();
+            int cd = dist[cur.x, cur.y];
+
+            if (IsValidSpawnCell(g, cur.x, cur.y) && cd >= farthestDist)
+            {
+                farthestDist = cd;
+                farthest = cur;
+            }
+
+            TryVisit(g, dist, q, cur.x, cur.y + 1, cd + 1);
+            TryVisit(g, dist, q, cur.x + 1, cur.y, cd + 1);
+            TryVisit(g, dist, q, cur.x, cur.y - 1, cd + 1);
+            TryVisit(g, dist, q, cur.x - 1, cur.y, cd + 1);
+        }
+
+        return (farthest, farthestDist);
+    }
+
+    public bool TryGetSpawnWorldPosition(int playerIndex, out Vector3 worldPos)
+    {
+        worldPos = Vector3.zero;
+
+        if (!enableCoverLayer || coverLayout == null)
+            return false;
+
+        int targetGroup = (playerIndex == 1) ? player1SpawnGroupId : player2SpawnGroupId;
+
+        
+        for (int x = 0; x < width; x++)
+        {
+            for (int z = 0; z < depth; z++)
+            {
+                
+                if (coverLayout[x, z, spawnLevel].group == targetGroup)
+                {
+                    
+                    Vector3 basePos = GridToWorld(x, 0, z);
+                    basePos += new Vector3(moduleSize * 0.5f, 0f, moduleSize * 0.5f);
+
+                    worldPos = basePos;
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+
+    private void ClearSpawnMarkersInCover()
+    {
+        for (int x = 0; x < width; x++)
+        {
+            for (int z = 0; z < depth; z++)
+            {
+                for (int l = 0; l < levels; l++)
+                {
+                    int g = coverLayout[x, z, l].group;
+                    if (g == player1SpawnGroupId || g == player2SpawnGroupId)
+                    {
+                        coverLayout[x, z, l] = TileCode.Empty;
+                    }
+                }
+            }
+        }
+    }
+
+
+
+
+    private void TryVisit(bool[,] g, int[,] dist, Queue<Vector2Int> q, int x, int z, int nd)
+    {
+        if (x < 0 || x >= width || z < 0 || z >= depth) return;
+        if (!g[x, z]) return;
+        if (dist[x, z] != -1) return;
+
+        dist[x, z] = nd;
+        q.Enqueue(new Vector2Int(x, z));
+    }
+
+
 
     private bool[,] GenerateWalkablePlan()
     {
@@ -426,7 +692,7 @@ public class FpsMapGenerator : MonoBehaviour
             /*open West*/return new TileCode(floorThreeWallsGroupId, Direction.West);
         }
 
-        // 4 walls (usually you won't have these, but handle anyway)
+        // 4 walls
         return new TileCode(floorFourWallsGroupId, Direction.North);
     }
 
@@ -590,7 +856,7 @@ public class FpsMapGenerator : MonoBehaviour
                 continue;
             }
 
-            if (entry == null)
+            if (entry.prefab == null)
             {
                 continue; 
             }
@@ -618,17 +884,7 @@ public class FpsMapGenerator : MonoBehaviour
         //13   = Ground with three walls (The empty Gap where there is no wall is Northfacing)
         //15   = Ground with Door (The side with the door is Northfacing)
 
-        //-----------------------Guide not finished below this-----------------------
-        //20 = Ceiling / Roof(Ceiling with no walls or Ground)
-        //21.1 – 21.4 = Ceiling with one wall(same Notation as 1.1 – 1.4)
-        //22.1 – 22.6 = Ceiling with two walls(same Notation as 2.1 – 2.6)
-        //23.1 – 23.4 = Ceiling with three walls(same notation as 3.1 – 3.4)
 
-        //30 = Ceiling and Ground(No walls)
-        //31.1 – 31.4 = Ceiling and Ground with one wall(same Notation as 1.1 – 1.4)
-        //32.1 – 32.6 = Ceiling and Ground with two walls(same Notation as 2.1 – 2.6)
-        //33.1 – 33.4 = Ceiling and Ground with three walls(same Notation as 3.1 – 3.4)
-        //35.1 – 35.1 = Ceiling and Ground with Door(Same Notation as 15.1 – 15.4)
 
 
 
@@ -719,12 +975,6 @@ public class FpsMapGenerator : MonoBehaviour
         int h = level0.GetLength(0);
         int w = level0.GetLength(1);
 
-     
-        //width = w;
-        //depth = h;
-        //levels = 3;
-
-        //AllocateLayout(); // clears layout to empty with updated sizes
 
         // copy each matrix into layout
         CopyMatrixIntoLevel(target, level0, 0);
@@ -819,6 +1069,8 @@ public class FpsMapGenerator : MonoBehaviour
                     {
                         continue;
                     }
+
+
 
                     Vector3 worldPos = GridToWorld(x, level, z) + worldOffset;
                     Quaternion rot = GetRotationForDirection(tile.dir);
