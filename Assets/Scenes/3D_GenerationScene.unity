@@ -4230,8 +4230,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minWalkableNeighborsToKeep: 2
   exteriorCullIterations: 2
-  width: 10
-  depth: 10
+  width: 20
+  depth: 20
   levels: 3
   moduleSize: 10
   generationMode: 1
@@ -4305,8 +4305,8 @@ MonoBehaviour:
   player2SpawnGroupId: 102
   spawnLevel: 0
   placeSpawnsForProcedural: 1
-  useRandomSeed: 1
-  seed: 12345
+  useRandomSeed: 0
+  seed: 1
   generateOnStart: 1
   regenWithRkey: 1
 --- !u!4 &494364851

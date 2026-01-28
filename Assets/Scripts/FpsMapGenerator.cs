@@ -19,8 +19,8 @@ public class FpsMapGenerator : MonoBehaviour
 
     public enum GenerationMode
     { 
-    ManualMatrix, //Premade Maps 
-    ProceduralWalkable //Procedurally generated maps (just the floorplan)
+    ManuallyMadeMap1, //Premade Maps 
+    ProcedurallyGeneratedMap //Procedurally generated maps (just the floorplan)
     
     }
 
@@ -62,7 +62,7 @@ public class FpsMapGenerator : MonoBehaviour
     public float moduleSize = 10f;  // tile size in world units
 
     [Header("Generation Mode")]
-    public GenerationMode generationMode = GenerationMode.ManualMatrix;
+    public GenerationMode generationMode = GenerationMode.ManuallyMadeMap1;
 
     public int proceduralFloorGroupId = 10;
     public bool keepBorderBlocked = true;
@@ -227,7 +227,7 @@ public class FpsMapGenerator : MonoBehaviour
             AllocateCoverLayout();
         }
 
-        if (generationMode == GenerationMode.ManualMatrix)
+        if (generationMode == GenerationMode.ManuallyMadeMap1)
         {
             InitializeLayoutManually();
 
@@ -241,20 +241,20 @@ public class FpsMapGenerator : MonoBehaviour
 
         if (enableCoverLayer)
         {
-            if (generationMode == GenerationMode.ManualMatrix)
+            if (generationMode == GenerationMode.ManuallyMadeMap1)
             {
 
                 InitializeCoverLayoutManually();
             }
 
-            if (generationMode == GenerationMode.ProceduralWalkable && placeSpawnsForProcedural)
+            if (generationMode == GenerationMode.ProcedurallyGeneratedMap && placeSpawnsForProcedural)
             {
                 PlaceSpawnPointsFromWalkable(walkable);
             }
 
         }
         else
-            if (generationMode == GenerationMode.ProceduralWalkable && placeSpawnsForProcedural)
+            if (generationMode == GenerationMode.ProcedurallyGeneratedMap && placeSpawnsForProcedural)
         {
             Debug.LogWarning("Spawn placement has been requested but enable coverlayer is false");
         }
