@@ -429,7 +429,7 @@ public class FpsMapGenerator : MonoBehaviour
                 {
                     
                     Vector3 basePos = GridToWorld(x, 0, z);
-                    basePos += new Vector3(moduleSize * 0.5f, 0f, moduleSize * 0.5f);
+                   // basePos += new Vector3(moduleSize * 0.5f, 0f, moduleSize * 0.5f);
 
                     worldPos = basePos;
                     return true;
@@ -651,7 +651,7 @@ public class FpsMapGenerator : MonoBehaviour
         // 1 wall
         if (wallCount == 1)
         {
-            // One-wall prefab default: wall on North at Direction.North
+            // One wall prefab default: wall on North at Direction.North
             if (wallN) return new TileCode(floorOneWallGroupId, Direction.North);
             if (wallE) return new TileCode(floorOneWallGroupId, Direction.East);
             if (wallS) return new TileCode(floorOneWallGroupId, Direction.South);
@@ -665,7 +665,7 @@ public class FpsMapGenerator : MonoBehaviour
 
             if (opposite)
             {
-                // Opposite-walls prefab default: walls on North + South
+                // Opposite walls prefab default: walls on North + South
                 // If walls are E+W, rotate 90 degrees (Direction.East).
                 if (wallN && wallS) return new TileCode(floorTwoWallsOppositeGroupId, Direction.North);
                 /*wallE && wallW*/  return new TileCode(floorTwoWallsOppositeGroupId, Direction.East);
@@ -694,43 +694,6 @@ public class FpsMapGenerator : MonoBehaviour
 
         // 4 walls
         return new TileCode(floorFourWallsGroupId, Direction.North);
-    }
-
-
-    private void OnDrawGizmosSelected()
-    {
-        if (!drawWalkableDebug)
-        {
-            return;
-        }
-        if (generationMode != GenerationMode.ProceduralWalkable)
-        {
-            return;
-        }
-
-        if (walkable == null)
-        { 
-            return;
-        }
-
-        Gizmos.matrix = Matrix4x4.identity;
-
-        for (int x = 0; x < width; x++)
-        {
-            for (int z = 0; z < depth; z++)
-            {
-
-                if (!walkable[x, z]) continue;
-
-                Vector3 p = GridToWorld(x, 0, z) + new Vector3(moduleSize * 0.5f, 0.2f, moduleSize * 0.5f);
-                Gizmos.DrawWireCube(p, new Vector3(moduleSize * 0.9f, 0.2f, moduleSize * 0.9f));
-
-
-            }
-        
-        }
-
-    
     }
 
 
@@ -931,13 +894,13 @@ public class FpsMapGenerator : MonoBehaviour
     {
         string[,] C0 =
         {
-            { "0","0","0","0","0","0","0" },//Closest to camera spawn (South Side)
+            { "101","0","0","0","0","0","0" },//Closest to camera spawn (South Side)
             { "0","0","0","0","0","0","0" },
             { "0","0","0","0","0","0","0" },
             { "0","0","0","0","0","0","0" },
             { "0","0","0","0","0","0","0" },
             { "0","0","0","0","0","0","0" },
-            { "0","0","0","0","0","0","0" },//Furthest from camera spawn (NorthSide)
+            { "0","0","0","0","0","0","102" },//Furthest from camera spawn (NorthSide)
 
         };
         string[,] C1 =
