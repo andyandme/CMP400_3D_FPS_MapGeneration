@@ -49,25 +49,11 @@ public class FpsMapGenerator : MonoBehaviour
         public static TileCode Empty => new TileCode(0, Direction.None);
     }
 
-
-   
-    [Header("Procedural: Exterior Cull")]
-    [Range(0, 4)] public int minWalkableNeighborsToKeep = 1;  
-    [Range(0, 10)] public int exteriorCullIterations = 1;
-   
-
-
- 
-
     [Header("Grid Settings")]
     public int width = 24;
     public int depth = 24;
     public int levels = 3;          // 0 = ground, 1 = mid, 2 = top
     public float moduleSize = 10f;  // tile size in world units
-
-
-
-
 
 
     [Header("Generation Mode")]
@@ -77,6 +63,7 @@ public class FpsMapGenerator : MonoBehaviour
 
     [Header("Border Smoothing")]
     public int borderSmoothCornerGroupId = 19;
+    [Range(0, 8)] public int borderSmoothingSpawnExcludeRadius = 3;
 
 
     [Range(0, 50)]
@@ -89,6 +76,13 @@ public class FpsMapGenerator : MonoBehaviour
 
     [Range(0, 2)]
     public int corridorThickness = 2;
+
+
+
+    [Header("Procedural: Exterior Cull")]
+    [Range(0, 4)] public int minWalkableNeighborsToKeep = 1;
+    [Range(0, 10)] public int exteriorCullIterations = 1;
+
 
 
     [Header("Procedural: buildings")]
@@ -287,30 +281,28 @@ public class FpsMapGenerator : MonoBehaviour
                 walkable = GenerateWalkablePlan();
                 CullExteriorWalkable(walkable);
 
-                
+
                 if (enableBuildings)
-                {
                     ApplyBuildingsToWalkable(walkable);
-                }
+
+                if (forceConnectivityFail)
+                    ForceDisconnectByBlockingRow(walkable, forceBlockRowZ);
 
                 
+                InitializeLayoutFromWalkable(walkable);
+
+                if (enableCoverLayer && placeSpawnsForProcedural)
+                    PlaceSpawnPointsFromWalkable(walkable);
+
+                if (enableBuildings)
+                    PlaceDoorsForAllBuildings(walkable);
+
+               
+                SmoothOuterBorderCorners(walkable);
+
+
             }
 
-
-            if (forceConnectivityFail)
-            {
-                ForceDisconnectByBlockingRow(walkable, forceBlockRowZ);
-
-            }
-
-            InitializeLayoutFromWalkable(walkable);
-         
-
-
-            if (enableCoverLayer && placeSpawnsForProcedural)
-            {
-                PlaceSpawnPointsFromWalkable(walkable);
-            }
 
             if (enableBuildings)
                 PlaceDoorsForAllBuildings(walkable);
@@ -429,59 +421,77 @@ public class FpsMapGenerator : MonoBehaviour
             return g;
         }
 
-        
+
         rooms.Sort((a, b) => a.center.x.CompareTo(b.center.x));
 
         for (int i = 0; i < rooms.Count - 1; i++)
         {
             Vector2Int a = Vector2Int.RoundToInt(rooms[i].center);
             Vector2Int b = Vector2Int.RoundToInt(rooms[i + 1].center);
-            CarveCorridorThick(g, a, b, corridorThickness, minX, maxX, minZ, maxZ);
+            CarveCorridorWiggle(g, a, b, corridorThickness, minX, maxX, minZ, maxZ);
         }
 
         return g;
+
+
     }
 
-    private void CarveCorridorThick(bool[,] g, Vector2Int a, Vector2Int b, int thickness, int minX, int maxX, int minZ, int maxZ)
+    private void CarveCorridorWiggle(bool[,] g, Vector2Int a, Vector2Int b, int thickness, int minX, int maxX, int minZ, int maxZ)
     {
         int x = a.x;
         int z = a.y;
 
-        int maxSteps = (Mathf.Abs(b.x - a.x) + Mathf.Abs(b.y - a.y)) * 4 + 32;
-        int steps = 0;
+        int guard = width * depth * 4;
+        int lastDx = 0;
+        int lastDz = 0;
 
-        while ((x != b.x || z != b.y) && steps++ < maxSteps)
+        while ((x != b.x || z != b.y) && guard-- > 0)
         {
             CarveThick(g, x, z, thickness, minX, maxX, minZ, maxZ);
 
-            int dx = b.x - x;
-            int dz = b.y - z;
+            int dx = Math.Sign(b.x - x);
+            int dz = Math.Sign(b.y - z);
 
-            bool canStepX = dx != 0;
-            bool canStepZ = dz != 0;
+            bool canX = dx != 0;
+            bool canZ = dz != 0;
 
-            if (canStepX && canStepZ)
-            {
-                
-                int ax = Mathf.Abs(dx);
-                int az = Mathf.Abs(dz);
-                int roll = rng.Next(0, ax + az);
+            if (!canX && !canZ) break;
 
-                if (roll < ax) x += Math.Sign(dx);
-                else z += Math.Sign(dz);
-            }
-            else if (canStepX)
+            // Prefer direction that reduces distance, but occasionally turn to avoid long straight L-bends
+            bool turn = rng.NextDouble() < 0.55;
+
+            int stepX = 0;
+            int stepZ = 0;
+
+            if (canX && canZ)
             {
-                x += Math.Sign(dx);
+                if (turn)
+                {
+                    // alternate axis to introduce bends
+                    if (lastDx != 0) { stepX = 0; stepZ = dz; }
+                    else { stepX = dx; stepZ = 0; }
+                }
+                else
+                {
+                    // go toward dominant distance axis
+                    if (Math.Abs(b.x - x) >= Math.Abs(b.y - z)) { stepX = dx; stepZ = 0; }
+                    else { stepX = 0; stepZ = dz; }
+                }
             }
-            else if (canStepZ)
-            {
-                z += Math.Sign(dz);
-            }
+            else if (canX) { stepX = dx; stepZ = 0; }
+            else { stepX = 0; stepZ = dz; }
+
+            lastDx = stepX;
+            lastDz = stepZ;
+
+            x += stepX;
+            z += stepZ;
         }
 
-        CarveThick(g, x, z, thickness, minX, maxX, minZ, maxZ);
+        CarveThick(g, b.x, b.y, thickness, minX, maxX, minZ, maxZ);
     }
+
+
 
     private void CarveThick(bool[,] g, int x, int z, int thickness, int minX, int maxX, int minZ, int maxZ)
     {
@@ -575,12 +585,12 @@ public class FpsMapGenerator : MonoBehaviour
         if (xMin < minX || zMin < minZ || xMax > maxX || zMax > maxZ)
             return false;
 
-        // Core must be fully walkable
+        
         for (int z = z0; z < z0 + bh; z++)
             for (int x = x0; x < x0 + bw; x++)
                 if (!g[x, z]) return false;
 
-        // Ring: mostly walkable
+       
         if (clearance > 0)
         {
             int ringTotal = 0;
@@ -613,14 +623,15 @@ public class FpsMapGenerator : MonoBehaviour
         if (layout == null || g == null) return;
         if (borderSmoothCornerGroupId == 0) return;
 
+        bool hasS1 = TryGetSpawnCell(1, out Vector2Int s1);
+        bool hasS2 = TryGetSpawnCell(2, out Vector2Int s2);
+
         for (int x = 0; x < width; x++)
         {
             for (int z = 0; z < depth; z++)
             {
 
-                if (IsNearSpawn(x, z, 2))
-                    continue;
-
+  
                 if (buildingMask != null && buildingMask[x, z])
                     continue;
 
@@ -628,44 +639,25 @@ public class FpsMapGenerator : MonoBehaviour
                 if (t.group != floorTwoWallsCornerGroupId)
                     continue;
 
-                // Corner walls for group 13 depend on dir
+                if (hasS1 && (Mathf.Abs(x - s1.x) + Mathf.Abs(z - s1.y)) <= borderSmoothingSpawnExcludeRadius)
+                    continue;
+
+                if (hasS2 && (Mathf.Abs(x - s2.x) + Mathf.Abs(z - s2.y)) <= borderSmoothingSpawnExcludeRadius)
+                    continue;
+
+                
                 GetCornerWallDirs(t.dir, out Direction wallA, out Direction wallB);
 
-                // Only smooth corners that border the void (not buildings)
+                
                 if (!IsVoidOnSide(g, x, z, wallA)) continue;
                 if (!IsVoidOnSide(g, x, z, wallB)) continue;
 
-                // Open sides are the other two directions
-                Direction openA = GetOtherOpenDir(t.dir, 0);
-                Direction openB = GetOtherOpenDir(t.dir, 1);
 
-                // Skip isolated "real" corners
-                if (!HasAdjacentVoidCorner(g, x, z, openA) && !HasAdjacentVoidCorner(g, x, z, openB))
-                    continue;
-
-                // Swap to smooth border corner, keep rotation
                 layout[x, z, 0] = new TileCode(borderSmoothCornerGroupId, t.dir);
             }
         }
     }
 
-    private bool IsNearSpawn(int x, int z, int radius)
-    {
-        if (!TryGetSpawnCell(1, out var s1) || !TryGetSpawnCell(2, out var s2))
-            return false;
-
-        int r2 = radius * radius;
-
-        int dx1 = x - s1.x;
-        int dz1 = z - s1.y;
-        if (dx1 * dx1 + dz1 * dz1 <= r2) return true;
-
-        int dx2 = x - s2.x;
-        int dz2 = z - s2.y;
-        if (dx2 * dx2 + dz2 * dz2 <= r2) return true;
-
-        return false;
-    }
 
     private void GetCornerWallDirs(Direction dir, out Direction wallA, out Direction wallB)
     {
@@ -680,47 +672,7 @@ public class FpsMapGenerator : MonoBehaviour
         }
     }
 
-    private Direction GetOtherOpenDir(Direction cornerDir, int index)
-    {
 
-        switch (cornerDir)
-        {
-            case Direction.North: return (index == 0) ? Direction.East : Direction.South;
-            case Direction.East: return (index == 0) ? Direction.West : Direction.South;
-            case Direction.South: return (index == 0) ? Direction.West : Direction.North;
-            case Direction.West: return (index == 0) ? Direction.East : Direction.North;
-            default: return (index == 0) ? Direction.East : Direction.South;
-        }
-    }
-
-    private bool HasAdjacentVoidCorner(bool[,] g, int x, int z, Direction toward)
-    {
-        for (int step = 1; step <= 2; step++)
-        {
-            int nx = x + DirDx(toward) * step;
-            int nz = z + DirDz(toward) * step;
-
-            if (nx < 0 || nx >= width || nz < 0 || nz >= depth)
-                return false;
-
-            if (buildingMask != null && buildingMask[nx, nz])
-                return false;
-
-            if (!g[nx, nz])
-                return false;
-
-            TileCode n = layout[nx, nz, 0];
-            if (n.group != floorTwoWallsCornerGroupId)
-                continue;
-
-            GetCornerWallDirs(n.dir, out Direction wA, out Direction wB);
-
-            if (IsVoidOnSide(g, nx, nz, wA) && IsVoidOnSide(g, nx, nz, wB))
-                return true;
-        }
-
-        return false;
-    }
 
     private bool IsVoidOnSide(bool[,] g, int x, int z, Direction side)
     {
@@ -823,7 +775,7 @@ public class FpsMapGenerator : MonoBehaviour
             for (int z = 0; z < depth; z++)
                 layout[x, z, 0] = TileCode.Empty;
 
-        //Walkable tiles (skip building cells)
+        //Walkable tiles(skip building cells)
         for (int x = 0; x < width; x++)
         {
             for (int z = 0; z < depth; z++)
@@ -894,6 +846,73 @@ public class FpsMapGenerator : MonoBehaviour
         return buildingMask[x, z];
     }
     //Open includes walkable and building footprint
+
+
+    private bool IsBuildingCell(int x, int z)
+    {
+        if (buildingMask == null) return false;
+        if (x < 0 || x >= width || z < 0 || z >= depth) return false;
+        return buildingMask[x, z];
+    }
+
+    private bool IsExteriorSideOfBuilding(int x, int z, Direction side)
+    {
+        int nx = x + DirDx(side);
+        int nz = z + DirDz(side);
+        return !IsBuildingCell(nx, nz);
+    }
+
+    private bool TryGetKeptCornerWall(int x, int z, Direction outwardDir, out Direction keptWall)
+    {
+        keptWall = Direction.None;
+
+        // Door must face outward
+        if (!IsExteriorSideOfBuilding(x, z, outwardDir))
+            return false;
+
+        // Collect all exterior sides
+        List<Direction> exterior = new List<Direction>(4);
+        if (IsExteriorSideOfBuilding(x, z, Direction.North)) exterior.Add(Direction.North);
+        if (IsExteriorSideOfBuilding(x, z, Direction.East)) exterior.Add(Direction.East);
+        if (IsExteriorSideOfBuilding(x, z, Direction.South)) exterior.Add(Direction.South);
+        if (IsExteriorSideOfBuilding(x, z, Direction.West)) exterior.Add(Direction.West);
+
+        // Corner = at least 2 exterior sides
+        if (exterior.Count < 2)
+            return false;
+
+        // Keep the other exterior side (not the opening)
+        for (int i = 0; i < exterior.Count; i++)
+        {
+            if (exterior[i] != outwardDir)
+            {
+                keptWall = exterior[i];
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private int GetCornerDoorVariantFromKeptWall(Direction outwardDir, Direction keptWall)
+    {
+        Direction leftOf = Direction.None;
+        Direction rightOf = Direction.None;
+
+        switch (outwardDir)
+        {
+            case Direction.North: leftOf = Direction.West; rightOf = Direction.East; break;
+            case Direction.East: leftOf = Direction.North; rightOf = Direction.South; break;
+            case Direction.South: leftOf = Direction.East; rightOf = Direction.West; break;
+            case Direction.West: leftOf = Direction.South; rightOf = Direction.North; break;
+        }
+
+        if (keptWall == leftOf) return doorCornerLeftWallGroupId;   // 151
+        if (keptWall == rightOf) return doorCornerRightWallGroupId;  // 152
+        return doorGroupId; // fallback
+    }
+
+
     private bool IsOpenForWallMask(bool[,] g, int x, int z)
     {
         if (x < 0 || x >= width || z < 0 || z >= depth)
@@ -1078,82 +1097,64 @@ public class FpsMapGenerator : MonoBehaviour
 
     private void PlaceSpawnPointsFromWalkable(bool[,] g)
     {
-        if (g == null)
-        {
-            Debug.LogWarning("PlaceSpawnPointsFromWalkable: walkable grid is null");
-            return;
-        }
-        if (coverLayout == null)
-        {
-            Debug.LogWarning("PlaceSpawnPointsFromWalkable: coverLayout is null");
-            return;
-        }
+        if (g == null || coverLayout == null) return;
 
         ClearSpawnMarkersInCover();
 
-        List<Vector2Int> candidates = new List<Vector2Int>();
+        List<Vector2Int> candidates = new List<Vector2Int>(width * depth);
         for (int x = 0; x < width; x++)
             for (int z = 0; z < depth; z++)
                 if (IsValidSpawnCell(g, x, z))
                     candidates.Add(new Vector2Int(x, z));
 
-        if (candidates.Count == 0)
+        if (candidates.Count < 2)
         {
-            Debug.LogWarning("[FpsMapGenerator] No valid spawn candidates found (walkable+floor). Check your floor group IDs / prefabs.");
+            Debug.LogWarning("[FpsMapGenerator] Not enough spawn candidates.");
             return;
         }
 
-        Vector2Int start = candidates[rng.Next(0, candidates.Count)];
+        Vector2Int bestA = candidates[0];
+        Vector2Int bestB = candidates[1];
+        float bestScore = float.NegativeInfinity;
 
-        var bfs1 = BFSFarthestValidCandidate(g, start);
-        Vector2Int A = bfs1.farthest;
+        //path distance dominates. euclid breaks ties toward opposite sides
+        const float PATH_W = 10f;
+        const float EUCLID_W = 4f;
 
-        var bfs2 = BFSFarthestValidCandidate(g, A);
-        Vector2Int B = bfs2.farthest;
-
-        coverLayout[A.x, A.y, spawnLevel] = new TileCode(player1SpawnGroupId, Direction.North);
-        coverLayout[B.x, B.y, spawnLevel] = new TileCode(player2SpawnGroupId, Direction.North);
-
-        Debug.Log($"[FpsMapGenerator] Spawn cells chosen: P1={A}, P2={B}, dist={bfs2.farthestDist}");
-    }
-
-    private (Vector2Int farthest, int farthestDist) BFSFarthestValidCandidate(bool[,] g, Vector2Int start)
-    {
-        int[,] dist = new int[width, depth];
-        for (int x = 0; x < width; x++)
-            for (int z = 0; z < depth; z++)
-                dist[x, z] = -1;
-
-        Queue<Vector2Int> q = new Queue<Vector2Int>();
-
-        if (!IsWalkable(g, start.x, start.y))
-            return (start, 0);
-
-        dist[start.x, start.y] = 0;
-        q.Enqueue(start);
-
-        Vector2Int farthest = start;
-        int farthestDist = 0;
-
-        while (q.Count > 0)
+        for (int i = 0; i < candidates.Count; i++)
         {
-            var cur = q.Dequeue();
-            int cd = dist[cur.x, cur.y];
+            Vector2Int a = candidates[i];
+            int[,] dist = ComputeDistanceField(g, a);
 
-            if (IsValidSpawnCell(g, cur.x, cur.y) && cd >= farthestDist)
+            for (int j = i + 1; j < candidates.Count; j++)
             {
-                farthestDist = cd;
-                farthest = cur;
-            }
+                Vector2Int b = candidates[j];
 
-            TryVisit(g, dist, q, cur.x, cur.y + 1, cd + 1);
-            TryVisit(g, dist, q, cur.x + 1, cur.y, cd + 1);
-            TryVisit(g, dist, q, cur.x, cur.y - 1, cd + 1);
-            TryVisit(g, dist, q, cur.x - 1, cur.y, cd + 1);
+                int d = dist[b.x, b.y];
+                if (d < 0) continue;
+
+                int dx = a.x - b.x;
+                int dz = a.y - b.y;
+                float euclidSqr = (dx * dx) + (dz * dz);
+
+                float score = (d * PATH_W) + (euclidSqr * EUCLID_W);
+
+                if (score > bestScore)
+                {
+                    bestScore = score;
+                    bestA = a;
+                    bestB = b;
+                }
+            }
         }
 
-        return (farthest, farthestDist);
+        coverLayout[bestA.x, bestA.y, spawnLevel] = new TileCode(player1SpawnGroupId, Direction.North);
+        coverLayout[bestB.x, bestB.y, spawnLevel] = new TileCode(player2SpawnGroupId, Direction.North);
+
+        Debug.Log($"[FpsMapGenerator] Spawn cells chosen: P1={bestA}, P2={bestB}, score={bestScore:0.0}");
     }
+
+   
 
     private void TryVisit(bool[,] g, int[,] dist, Queue<Vector2Int> q, int x, int z, int nd)
     {
@@ -1545,11 +1546,11 @@ public class FpsMapGenerator : MonoBehaviour
         if (g == null || layout == null) return;
         if (!IsWalkable(g, x, z)) return;
 
-     
-        bool n = IsWalkable(g, x, z + 1);
-        bool e = IsWalkable(g, x + 1, z);
-        bool s = IsWalkable(g, x, z - 1);
-        bool w = IsWalkable(g, x - 1, z);
+
+        bool n = IsOpenForWallMask(g, x, z + 1);
+        bool e = IsOpenForWallMask(g, x + 1, z);
+        bool s = IsOpenForWallMask(g, x, z - 1);
+        bool w = IsOpenForWallMask(g, x - 1, z);
 
         bool wallN = !n;
         bool wallE = !e;
@@ -1704,7 +1705,7 @@ public class FpsMapGenerator : MonoBehaviour
         return found ? best : (DoorCandidate?)null;
     }
 
-    // Places door and opens adjacent corridor wall
+  
     private void PlaceDoorTile(bool[,] g, DoorCandidate c)
     {
         int bx = c.buildingCell.x;
@@ -1714,8 +1715,10 @@ public class FpsMapGenerator : MonoBehaviour
         int chosenDoorGroup = doorGroupId;
 
         // Corner replacement: 13 -> 151/152
-        if (prev.group == floorTwoWallsCornerGroupId)
-            chosenDoorGroup = ChooseCornerDoorVariant(prev, c.outwardDir);
+        if (TryGetKeptCornerWall(bx, bz, c.outwardDir, out Direction keptWall))
+        {
+            chosenDoorGroup = GetCornerDoorVariantFromKeptWall(c.outwardDir, keptWall);
+        }
 
         layout[bx, bz, 0] = new TileCode(chosenDoorGroup, c.outwardDir);
 
@@ -1723,45 +1726,8 @@ public class FpsMapGenerator : MonoBehaviour
         RebuildWalkableTileWithDoorOpening(g, c.outsideCell, corridorSideFacingDoor);
     }
 
-    // Selects 151/152 based on kept corner wall side
-    private int ChooseCornerDoorVariant(TileCode prevCorner, Direction outwardDir)
-    {
-        // Corner mapping from BuildTileFromWalls
-        // North: N+W, East: N+E, South: E+S, West: S+W
-        Direction w1 = Direction.North;
-        Direction w2 = Direction.West;
-
-        switch (prevCorner.dir)
-        {
-            case Direction.North: w1 = Direction.North; w2 = Direction.West; break;
-            case Direction.East: w1 = Direction.North; w2 = Direction.East; break;
-            case Direction.South: w1 = Direction.East; w2 = Direction.South; break;
-            case Direction.West: w1 = Direction.South; w2 = Direction.West; break;
-            default: w1 = Direction.North; w2 = Direction.West; break;
-        }
-
-        // Door opens on outwardDir side, keep the other wall
-        Direction keptWall;
-        if (outwardDir == w1) keptWall = w2;
-        else if (outwardDir == w2) keptWall = w1;
-        else return doorGroupId;
-
-        // Determine left/right wall relative to outwardDir
-        Direction leftOf = Direction.None;
-        Direction rightOf = Direction.None;
-
-        switch (outwardDir)
-        {
-            case Direction.North: leftOf = Direction.West; rightOf = Direction.East; break;
-            case Direction.East: leftOf = Direction.North; rightOf = Direction.South; break;
-            case Direction.South: leftOf = Direction.East; rightOf = Direction.West; break;
-            case Direction.West: leftOf = Direction.South; rightOf = Direction.North; break;
-        }
-
-        if (keptWall == leftOf) return doorCornerLeftWallGroupId;
-        if (keptWall == rightOf) return doorCornerRightWallGroupId;
-        return doorGroupId;
-    }
+   
+   
 
     private List<DoorCandidate> GatherDoorCandidatesForComponent(List<Vector2Int> component, bool[,] g)
     {
