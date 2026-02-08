@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.TestTools;
+
 
 
 public class FpsMapGenerator : MonoBehaviour
@@ -73,14 +73,11 @@ public class FpsMapGenerator : MonoBehaviour
     [Header("Generation Mode")]
     public GenerationMode generationMode = GenerationMode.ManuallyMadeMap1;
 
-    public int proceduralFloorGroupId = 10;
-
     public bool keepBorderBlocked = true;
 
+    [Header("Border Smoothing")]
+    public int borderSmoothCornerGroupId = 19;
 
-    //public int buildingAttempts = 30;
-
-    
 
     [Range(0, 50)]
     public int extraRooms = 8;
@@ -295,6 +292,8 @@ public class FpsMapGenerator : MonoBehaviour
                 {
                     ApplyBuildingsToWalkable(walkable);
                 }
+
+                
             }
 
 
@@ -316,6 +315,7 @@ public class FpsMapGenerator : MonoBehaviour
             if (enableBuildings)
                 PlaceDoorsForAllBuildings(walkable);
 
+            SmoothOuterBorderCorners(walkable);
 
             // Validate
             accepted = ValidateConnectivityAndQuality(walkable, out lastRejectReason);
@@ -447,33 +447,36 @@ public class FpsMapGenerator : MonoBehaviour
         int x = a.x;
         int z = a.y;
 
+        int maxSteps = (Mathf.Abs(b.x - a.x) + Mathf.Abs(b.y - a.y)) * 4 + 32;
+        int steps = 0;
 
-        bool horizontalFirst = rng.Next(0, 2) == 0;
+        while ((x != b.x || z != b.y) && steps++ < maxSteps)
+        {
+            CarveThick(g, x, z, thickness, minX, maxX, minZ, maxZ);
 
-        if (horizontalFirst)
-        {
-            while (x != b.x)
+            int dx = b.x - x;
+            int dz = b.y - z;
+
+            bool canStepX = dx != 0;
+            bool canStepZ = dz != 0;
+
+            if (canStepX && canStepZ)
             {
-                CarveThick(g, x, z, thickness, minX, maxX, minZ, maxZ);
-                x += Math.Sign(b.x - x);
+                
+                int ax = Mathf.Abs(dx);
+                int az = Mathf.Abs(dz);
+                int roll = rng.Next(0, ax + az);
+
+                if (roll < ax) x += Math.Sign(dx);
+                else z += Math.Sign(dz);
             }
-            while (z != b.y)
+            else if (canStepX)
             {
-                CarveThick(g, x, z, thickness, minX, maxX, minZ, maxZ);
-                z += Math.Sign(b.y - z);
+                x += Math.Sign(dx);
             }
-        }
-        else
-        {
-            while (z != b.y)
+            else if (canStepZ)
             {
-                CarveThick(g, x, z, thickness, minX, maxX, minZ, maxZ);
-                z += Math.Sign(b.y - z);
-            }
-            while (x != b.x)
-            {
-                CarveThick(g, x, z, thickness, minX, maxX, minZ, maxZ);
-                x += Math.Sign(b.x - x);
+                z += Math.Sign(dz);
             }
         }
 
@@ -601,6 +604,158 @@ public class FpsMapGenerator : MonoBehaviour
         }
 
         return true;
+    }
+
+    private void SmoothOuterBorderCorners(bool[,] g)
+    {
+
+
+        if (layout == null || g == null) return;
+        if (borderSmoothCornerGroupId == 0) return;
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int z = 0; z < depth; z++)
+            {
+
+                if (IsNearSpawn(x, z, 2))
+                    continue;
+
+                if (buildingMask != null && buildingMask[x, z])
+                    continue;
+
+                TileCode t = layout[x, z, 0];
+                if (t.group != floorTwoWallsCornerGroupId)
+                    continue;
+
+                // Corner walls for group 13 depend on dir
+                GetCornerWallDirs(t.dir, out Direction wallA, out Direction wallB);
+
+                // Only smooth corners that border the void (not buildings)
+                if (!IsVoidOnSide(g, x, z, wallA)) continue;
+                if (!IsVoidOnSide(g, x, z, wallB)) continue;
+
+                // Open sides are the other two directions
+                Direction openA = GetOtherOpenDir(t.dir, 0);
+                Direction openB = GetOtherOpenDir(t.dir, 1);
+
+                // Skip isolated "real" corners
+                if (!HasAdjacentVoidCorner(g, x, z, openA) && !HasAdjacentVoidCorner(g, x, z, openB))
+                    continue;
+
+                // Swap to smooth border corner, keep rotation
+                layout[x, z, 0] = new TileCode(borderSmoothCornerGroupId, t.dir);
+            }
+        }
+    }
+
+    private bool IsNearSpawn(int x, int z, int radius)
+    {
+        if (!TryGetSpawnCell(1, out var s1) || !TryGetSpawnCell(2, out var s2))
+            return false;
+
+        int r2 = radius * radius;
+
+        int dx1 = x - s1.x;
+        int dz1 = z - s1.y;
+        if (dx1 * dx1 + dz1 * dz1 <= r2) return true;
+
+        int dx2 = x - s2.x;
+        int dz2 = z - s2.y;
+        if (dx2 * dx2 + dz2 * dz2 <= r2) return true;
+
+        return false;
+    }
+
+    private void GetCornerWallDirs(Direction dir, out Direction wallA, out Direction wallB)
+    {
+ 
+        switch (dir)
+        {
+            case Direction.North: wallA = Direction.North; wallB = Direction.West; break;
+            case Direction.East: wallA = Direction.North; wallB = Direction.East; break;
+            case Direction.South: wallA = Direction.East; wallB = Direction.South; break;
+            case Direction.West: wallA = Direction.South; wallB = Direction.West; break;
+            default: wallA = Direction.North; wallB = Direction.West; break;
+        }
+    }
+
+    private Direction GetOtherOpenDir(Direction cornerDir, int index)
+    {
+
+        switch (cornerDir)
+        {
+            case Direction.North: return (index == 0) ? Direction.East : Direction.South;
+            case Direction.East: return (index == 0) ? Direction.West : Direction.South;
+            case Direction.South: return (index == 0) ? Direction.West : Direction.North;
+            case Direction.West: return (index == 0) ? Direction.East : Direction.North;
+            default: return (index == 0) ? Direction.East : Direction.South;
+        }
+    }
+
+    private bool HasAdjacentVoidCorner(bool[,] g, int x, int z, Direction toward)
+    {
+        for (int step = 1; step <= 2; step++)
+        {
+            int nx = x + DirDx(toward) * step;
+            int nz = z + DirDz(toward) * step;
+
+            if (nx < 0 || nx >= width || nz < 0 || nz >= depth)
+                return false;
+
+            if (buildingMask != null && buildingMask[nx, nz])
+                return false;
+
+            if (!g[nx, nz])
+                return false;
+
+            TileCode n = layout[nx, nz, 0];
+            if (n.group != floorTwoWallsCornerGroupId)
+                continue;
+
+            GetCornerWallDirs(n.dir, out Direction wA, out Direction wB);
+
+            if (IsVoidOnSide(g, nx, nz, wA) && IsVoidOnSide(g, nx, nz, wB))
+                return true;
+        }
+
+        return false;
+    }
+
+    private bool IsVoidOnSide(bool[,] g, int x, int z, Direction side)
+    {
+        int nx = x + DirDx(side);
+        int nz = z + DirDz(side);
+
+
+        if (nx < 0 || nx >= width || nz < 0 || nz >= depth)
+            return true;
+
+  
+        if (buildingMask != null && buildingMask[nx, nz])
+            return false;
+
+        return !g[nx, nz];
+    }
+
+    private int DirDx(Direction d)
+    {
+        switch (d)
+        {
+            case Direction.East: return 1;
+            case Direction.West: return -1;
+            default: return 0;
+        }
+    }
+
+    private int DirDz(Direction d)
+    {
+        switch (d)
+        {
+            case Direction.North: return 1;
+            case Direction.South: return -1;
+            default: return 0;
+        }
     }
 
     private void ForceDisconnectByBlockingRow(bool[,] g, int zRow)
