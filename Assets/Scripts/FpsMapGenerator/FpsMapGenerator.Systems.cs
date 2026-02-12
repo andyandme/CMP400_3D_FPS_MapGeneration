@@ -678,7 +678,7 @@ public partial class FpsMapGenerator : MonoBehaviour
         parent[x, z] = from;
         q.Enqueue(to);
     }
-.
+
     private HashSet<long> ComputeBridgeEdgeSet(bool[,] g)
     {
         int n = width * depth;
