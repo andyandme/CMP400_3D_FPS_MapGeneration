@@ -6,17 +6,17 @@ public partial class FpsMapGenerator : MonoBehaviour
 {
 
 
-    [Header("Validation: FPS Map Heuristics")]
+    [Header("Map Design Validation")]
 
-    // Dead ends
-    [Range(0f, 1f)] public float maxDeadEndFraction = 0.18f;   // % of walkable cells can be dead ends
-    [Range(1, 20)] public int maxDeadEndChainLength = 10;     // longest allowed chain from tip to junction
+
+    [Range(0f, 1f)] public float maxDeadEndFraction = 0.18f;  
+    [Range(1, 20)] public int maxDeadEndChainLength = 10;    
 
     
-    [Range(1, 20)] public int maxStraightRun = 14;            // max consecutive walkable cells in a straight line
+    [Range(1, 20)] public int maxStraightRun = 14;       
 
  
-    [Range(0,10)] public int maxBridgesOnSpawnPath = 3;     
+    [Range(0,10)] int maxBridgesOnSpawnPath = 3;      
 
     private void InitializeLayoutFromWalkable(bool[,] g)
     {
@@ -31,7 +31,7 @@ public partial class FpsMapGenerator : MonoBehaviour
             for (int z = 0; z < depth; z++)
                 layout[x, z, 0] = TileCode.Empty;
 
-        //Walkable tiles(skip building cells)
+        
         for (int x = 0; x < width; x++)
         {
             for (int z = 0; z < depth; z++)
@@ -42,10 +42,10 @@ public partial class FpsMapGenerator : MonoBehaviour
                 if (!g[x, z])
                     continue;
 
-                bool n = IsOpenForWallMask(g, x, z + 1);
-                bool e = IsOpenForWallMask(g, x + 1, z);
-                bool s = IsOpenForWallMask(g, x, z - 1);
-                bool w = IsOpenForWallMask(g, x - 1, z);
+                bool n = IsOpenCell(g, x, z + 1);
+                bool e = IsOpenCell(g, x + 1, z);
+                bool s = IsOpenCell(g, x, z - 1);
+                bool w = IsOpenCell(g, x - 1, z);
 
                 bool wallN = !n;
                 bool wallE = !e;
@@ -62,7 +62,7 @@ public partial class FpsMapGenerator : MonoBehaviour
             }
         }
 
-        // Building tiles from buildingMask adjecency 
+
         if (buildingMask != null)
         {
             for (int x = 0; x < width; x++)
@@ -72,12 +72,12 @@ public partial class FpsMapGenerator : MonoBehaviour
                     if (!buildingMask[x, z])
                         continue;
 
-                    bool bn = IsBuilding(x, z + 1);
-                    bool be = IsBuilding(x + 1, z);
-                    bool bs = IsBuilding(x, z - 1);
-                    bool bw = IsBuilding(x - 1, z);
+                    bool bn = IsBuildingCell(x, z + 1);
+                    bool be = IsBuildingCell(x + 1, z);
+                    bool bs = IsBuildingCell(x, z - 1);
+                    bool bw = IsBuildingCell(x - 1, z);
 
-                    // For buildings: wall where neighbor is NOT building
+                   
                     bool wallN = !bn;
                     bool wallE = !be;
                     bool wallS = !bs;
@@ -95,16 +95,7 @@ public partial class FpsMapGenerator : MonoBehaviour
         }
     }
 
-    private bool IsOpenForWallMask(bool[,] g, int x, int z)
-    {
-        if (x < 0 || x >= width || z < 0 || z >= depth)
-            return false;
 
-        if (g != null && g[x, z]) return true;
-        if (buildingMask != null && buildingMask[x, z]) return true;
-
-        return false;
-    }
 
     private bool IsWalkable(bool[,] g, int x, int z)
     {
@@ -112,7 +103,7 @@ public partial class FpsMapGenerator : MonoBehaviour
             return false;
         return g[x, z];
     }
-    //Converts wall booleans into group and rotation
+
     private TileCode BuildTileFromWalls(bool wallN, bool wallE, bool wallS, bool wallW, int wallCount)
     {
         if (wallCount == 0)
@@ -249,31 +240,17 @@ public partial class FpsMapGenerator : MonoBehaviour
     }
     public bool TryGetSpawnWorldPosition(int playerIndex, out Vector3 worldPos)
     {
-        worldPos = Vector3.zero;
+        worldPos = default;
 
         if (!enableCoverLayer || coverLayout == null)
             return false;
 
-        int targetGroup = (playerIndex == 1) ? player1SpawnGroupId : player2SpawnGroupId;
+       
+        if (!TryGetSpawnCell(playerIndex, out Vector2Int cell))
+            return false;
 
-        for (int x = 0; x < width; x++)
-        {
-            for (int z = 0; z < depth; z++)
-            {
-                if (coverLayout[x, z, spawnLevel].group == targetGroup)
-                {
-
-                    Vector3 basePos = GridToWorld(x, 0, z);
-
-
-
-                    worldPos = basePos;
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        worldPos = GridToWorld(cell.x, 0, cell.y);
+        return true;
     }
 
 
@@ -299,7 +276,7 @@ public partial class FpsMapGenerator : MonoBehaviour
         Vector2Int bestB = candidates[1];
         float bestScore = float.NegativeInfinity;
 
-        //path distance dominates. euclid breaks ties toward opposite sides
+
         const float PATH_W = 10f;
         const float EUCLID_W = 4f;
 
@@ -406,7 +383,7 @@ public partial class FpsMapGenerator : MonoBehaviour
 
         return goalDist >= 0;
     }
-    //-
+
     private bool ValidateConnectivityAndQuality(bool[,] g, out string reason)
     {
         reason = "";
@@ -465,7 +442,6 @@ public partial class FpsMapGenerator : MonoBehaviour
 
 
 
-        // Dead-end analysis
         AnalyzeDeadEnds(g, out int deadEndCells, out int maxChainLen);
         float deadEndFrac = (totalWalkable == 0) ? 0f : (float)deadEndCells / totalWalkable;
 
@@ -732,7 +708,7 @@ public partial class FpsMapGenerator : MonoBehaviour
 
                 low[u] = Math.Min(low[u], low[v]);
 
-                // Bridge condition
+
                 if (low[v] > disc[u])
                     bridges.Add(EdgeKey(ux, uz, vx, vz));
             }
@@ -752,7 +728,6 @@ public partial class FpsMapGenerator : MonoBehaviour
         return (x, z);
     }
 
-    // EdgeKey stored undirected: normalize endpoints.
     private long EdgeKey(Vector2Int a, Vector2Int b) => EdgeKey(a.x, a.y, b.x, b.y);
 
     private long EdgeKey(int ax, int az, int bx, int bz)
@@ -974,6 +949,12 @@ public partial class FpsMapGenerator : MonoBehaviour
             case Direction.East: return Quaternion.Euler(0f, 90f, 0f);
             case Direction.South: return Quaternion.Euler(0f, 180f, 0f);
             case Direction.West: return Quaternion.Euler(0f, 270f, 0f);
+
+            case Direction.NorthEast: return Quaternion.Euler(0f, 45f, 0f);
+            case Direction.SouthEast: return Quaternion.Euler(0f, 135f, 0f);
+            case Direction.SouthWest: return Quaternion.Euler(0f, 225f, 0f);
+            case Direction.NorthWest: return Quaternion.Euler(0f, 315f, 0f);
+
             default: return Quaternion.identity;
         }
     }

@@ -27,7 +27,6 @@ public partial class FpsMapGenerator : MonoBehaviour
         return c;
     }
 
-    //spawn Requires a floor and at least two exits
     private bool IsValidSpawnCell(bool[,] g, int x, int z)
     {
         if (!IsWalkable(g, x, z)) return false;
@@ -79,7 +78,6 @@ public partial class FpsMapGenerator : MonoBehaviour
 
             RectInt candidate = new RectInt(rx, rz, rw, rh);
 
-            // 1 tile padding avoids merges
             RectInt padded = new RectInt(candidate.xMin - 1, candidate.yMin - 1, candidate.width + 2, candidate.height + 2);
 
             bool overlaps = false;
@@ -119,98 +117,6 @@ public partial class FpsMapGenerator : MonoBehaviour
 
     }
 
-   
-
-    private int WalkableDegree(bool[,] g, int x, int z)
-    {
-        int deg = 0;
-        if (IsWalkableCell(g, x, z + 1)) deg++;
-        if (IsWalkableCell(g, x + 1, z)) deg++;
-        if (IsWalkableCell(g, x, z - 1)) deg++;
-        if (IsWalkableCell(g, x - 1, z)) deg++;
-        return deg;
-    }
-
-    private bool IsWalkableCell(bool[,] g, int x, int z)
-    {
-        if (x < 0 || x >= width || z < 0 || z >= depth) return false;
-        if (g == null) return false;
-        if (!g[x, z]) return false;
-        if (buildingMask != null && buildingMask[x, z]) return false;
-        return true;
-    }
-
-    private int MeasureDeadEndChainLength(bool[,] g, Vector2Int tip)
-    {
-        // Follow the corridor until we hit a junction (deg != 2) or end (deg == 1 again).
-        HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
-        Vector2Int cur = tip;
-        Vector2Int prev = new Vector2Int(int.MinValue, int.MinValue);
-
-        int length = 0;
-
-        while (true)
-        {
-            if (!visited.Add(cur))
-                break;
-
-            length++;
-
-            int deg = WalkableDegree(g, cur.x, cur.y);
-            if (deg != 2 && cur != tip)
-                break;
-
-            // Step to the next cell (the walkable neighbour that isn’t prev)
-            if (!TryGetNextChainStep(g, cur, prev, out Vector2Int next))
-                break;
-
-            prev = cur;
-            cur = next;
-        }
-
-        return length;
-    }
-
-    private bool TryGetNextChainStep(bool[,] g, Vector2Int cur, Vector2Int prev, out Vector2Int next)
-    {
-        // Check 4 neighbours, pick the one that is walkable and not prev.
-        Vector2Int n = new Vector2Int(cur.x, cur.y + 1);
-        Vector2Int e = new Vector2Int(cur.x + 1, cur.y);
-        Vector2Int s = new Vector2Int(cur.x, cur.y - 1);
-        Vector2Int w = new Vector2Int(cur.x - 1, cur.y);
-
-        if (IsWalkableCell(g, n.x, n.y) && n != prev) { next = n; return true; }
-        if (IsWalkableCell(g, e.x, e.y) && e != prev) { next = e; return true; }
-        if (IsWalkableCell(g, s.x, s.y) && s != prev) { next = s; return true; }
-        if (IsWalkableCell(g, w.x, w.y) && w != prev) { next = w; return true; }
-
-        next = default;
-        return false;
-    }
-
-
-    private void TryEnqueueDigNode(
-        bool[,] g,
-        int nx, int nz,
-        Vector2Int from,
-        bool[,] visited,
-        Vector2Int[,] cameFrom,
-        Queue<Vector2Int> q,
-        Func<int, int, bool> inBounds)
-    {
-        if (!inBounds(nx, nz)) return;
-        if (visited[nx, nz]) return;
-
-        // Do not dig through buildings
-        if (buildingMask != null && buildingMask[nx, nz]) return;
-
-        visited[nx, nz] = true;
-        cameFrom[nx, nz] = from;
-        q.Enqueue(new Vector2Int(nx, nz));
-    }
-
- 
-
     private void CarveCorridorWiggle(bool[,] g, Vector2Int a, Vector2Int b, int thickness, int minX, int maxX, int minZ, int maxZ)
     {
         int x = a.x;
@@ -232,7 +138,7 @@ public partial class FpsMapGenerator : MonoBehaviour
 
             if (!canX && !canZ) break;
 
-            // Prefer direction that reduces distance but occasionally turn to avoid long straight bends
+ 
             bool turn = rng.NextDouble() < 0.55;
 
             int stepX = 0;
@@ -242,13 +148,13 @@ public partial class FpsMapGenerator : MonoBehaviour
             {
                 if (turn)
                 {
-                    // alternate axis to introduce bends
+
                     if (lastDx != 0) { stepX = 0; stepZ = dz; }
                     else { stepX = dx; stepZ = 0; }
                 }
                 else
                 {
-                    // go toward dominant distance axis
+    
                     if (Math.Abs(b.x - x) >= Math.Abs(b.y - z)) { stepX = dx; stepZ = 0; }
                     else { stepX = 0; stepZ = dz; }
                 }
@@ -417,12 +323,12 @@ public partial class FpsMapGenerator : MonoBehaviour
                 for (int z = 0; z < depth; z++)
                 {
                     if (!g[x, z]) continue;
-                    //COunts open sides, including building footprints
+
                     int n =
-                    (IsOpenForWallMask(g, x, z + 1) ? 1 : 0) +
-                    (IsOpenForWallMask(g, x + 1, z) ? 1 : 0) +
-                    (IsOpenForWallMask(g, x, z - 1) ? 1 : 0) +
-                    (IsOpenForWallMask(g, x - 1, z) ? 1 : 0);
+                    (IsOpenCell(g, x, z + 1) ? 1 : 0) +
+                    (IsOpenCell(g, x + 1, z) ? 1 : 0) +
+                    (IsOpenCell(g, x, z - 1) ? 1 : 0) +
+                    (IsOpenCell(g, x - 1, z) ? 1 : 0);
 
                     if (n < minWalkableNeighborsToKeep)
                     {
@@ -437,11 +343,11 @@ public partial class FpsMapGenerator : MonoBehaviour
         }
     }
 
-    private bool[,] CopyGrid(bool[,] src, bool[,] dst)
+    private void CopyGrid(bool[,] src, bool[,] dst)
     {
         for (int x = 0; x < width; x++)
             for (int z = 0; z < depth; z++)
                 dst[x, z] = src[x, z];
-        return dst;
+        
     }
 }
