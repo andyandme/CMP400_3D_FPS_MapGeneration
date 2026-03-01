@@ -168,6 +168,10 @@ public partial class FpsMapGenerator : MonoBehaviour
     [Range(0, 6)] public int coverSpawnExcludeRadius = 3;
     [Range(0, 4)] public int coverDoorExcludeRadius = 1;
     [Range(0, 200)] public int maxOutdoorCovers = 60;
+    
+    public bool enableCoverRotationJitter = false;
+    [Range(0f, 1f)]
+    public float coverRotationJitterPercent = 0.2f;
 
     //----------IndoorCover----------
     [Header("Indoor Cover")]
@@ -368,7 +372,7 @@ public partial class FpsMapGenerator : MonoBehaviour
 
         if (enableCoverLayer)
         {
-            BuildGeometry(coverLayout, coverParent, coverPrefabLookup, coverWorldOffset);
+            BuildGeometry(coverLayout, coverParent, coverPrefabLookup, coverWorldOffset, true);
         }
 
         Debug.Log($"[FpsMapGenerator] Regenerated. Seed={lastUsedSeed} (useRandomSeed={useRandomSeed})");

@@ -729,6 +729,7 @@ public partial class FpsMapGenerator : MonoBehaviour
                 if (!buildingMask[sx, sz] || visited[sx, sz]) continue;
 
                 List<Vector2Int> comp = FloodFillBuildingComponent(new Vector2Int(sx, sz), visited);
+                if (comp == null || comp.Count == 0) continue;
 
                 List<Vector2Int> doors = new List<Vector2Int>();
                 for (int i = 0; i < comp.Count; i++)
@@ -746,8 +747,6 @@ public partial class FpsMapGenerator : MonoBehaviour
                     int tg = layout[c.x, c.y, 0].group;
 
                     if (IsDoorGroup(tg)) continue;
-
-   
                     if (tg == stairGroupId) continue;
 
                     if (!IsCoverCellFree(c.x, c.y, spawnLevel)) continue;
@@ -770,22 +769,39 @@ public partial class FpsMapGenerator : MonoBehaviour
 
                 int target = Mathf.Clamp(comp.Count / 10, 1, maxCoverPerBuilding);
 
+                int wallAdjCap = Mathf.Min(1, target);
+                wallAdjCap = Mathf.Min(wallAdjCap, Mathf.Max(0, target / 2));
+
                 candidates.Sort((a, b) =>
                 {
+                    bool aWallAdj = IsAdjacentToBuildingWall4(a.x, a.y);
+                    bool bWallAdj = IsAdjacentToBuildingWall4(b.x, b.y);
+
+                    // Prefer interior first
+                    if (aWallAdj != bWallAdj)
+                        return aWallAdj ? 1 : -1;
+
+                    // Then prefer farther from doors
                     int da = DoorDistanceScore(a, doors);
                     int db = DoorDistanceScore(b, doors);
                     if (da != db) return db.CompareTo(da);
 
+                    // Stable tie-break
                     int ha = StableHash(lastUsedSeed, a.x, a.y, 3001);
                     int hb = StableHash(lastUsedSeed, b.x, b.y, 3001);
                     return ha.CompareTo(hb);
                 });
 
                 List<Vector2Int> chosen = new List<Vector2Int>(target);
+                int wallAdjChosen = 0;
 
                 for (int i = 0; i < candidates.Count && chosen.Count < target; i++)
                 {
                     var c = candidates[i];
+
+                    bool wallAdj = IsAdjacentToBuildingWall4(c.x, c.y);
+                    if (wallAdj && wallAdjChosen >= wallAdjCap)
+                        continue;
 
                     bool tooClose = false;
                     for (int j = 0; j < chosen.Count; j++)
@@ -799,15 +815,11 @@ public partial class FpsMapGenerator : MonoBehaviour
                     int idx = Mathf.Abs(h) % indoorCoverGroupIds.Length;
                     int group = indoorCoverGroupIds[idx];
 
-
                     coverLayout[c.x, c.y, spawnLevel] = new TileCode(group, Direction.North);
 
                     if (placeUpper && buildingHasStairsMask != null && buildingHasStairsMask[c.x, c.y])
                     {
-                      
                         bool hasUpperFloorHere = layout[c.x, c.y, buildingUpperLevel].group != 0;
-
-                       
                         bool upperIsStair = layout[c.x, c.y, buildingUpperLevel].group == stairGroupId;
 
                         if (hasUpperFloorHere &&
@@ -819,8 +831,35 @@ public partial class FpsMapGenerator : MonoBehaviour
                     }
 
                     chosen.Add(c);
+                    if (wallAdj) wallAdjChosen++;
+                }
+
+                if (chosen.Count == 0 && candidates.Count > 0)
+                {
+                    var c = candidates[0];
+
+                    int h = StableHash(lastUsedSeed, c.x, c.y, 3003);
+                    int idx = Mathf.Abs(h) % indoorCoverGroupIds.Length;
+                    int group = indoorCoverGroupIds[idx];
+
+                    if (IsCoverCellFree(c.x, c.y, spawnLevel))
+                        coverLayout[c.x, c.y, spawnLevel] = new TileCode(group, Direction.North);
                 }
             }
+    }
+    private bool IsAdjacentToBuildingWall4(int x, int z)
+    {
+        if (buildingMask == null) return false;
+        if (x < 0 || x >= width || z < 0 || z >= depth) return false;
+
+        if (!buildingMask[x, z]) return false;
+
+        if (z + 1 >= depth || !buildingMask[x, z + 1]) return true; // North
+        if (x + 1 >= width || !buildingMask[x + 1, z]) return true; // East
+        if (z - 1 < 0 || !buildingMask[x, z - 1]) return true;      // South
+        if (x - 1 < 0 || !buildingMask[x - 1, z]) return true;      // West
+
+        return false;
     }
 
     private int DoorDistanceScore(Vector2Int c, List<Vector2Int> doors)

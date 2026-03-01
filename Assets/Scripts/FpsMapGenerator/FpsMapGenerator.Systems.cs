@@ -902,7 +902,12 @@ public partial class FpsMapGenerator : MonoBehaviour
 
     // ---------- GEOMETRY ----------
 
-    private void BuildGeometry(TileCode[,,] sourceLayout, Transform parent, Dictionary<int, GameObject> lookup, Vector3 worldOffset)
+    private void BuildGeometry(
+    TileCode[,,] sourceLayout,
+    Transform parent,
+    Dictionary<int, GameObject> lookup,
+    Vector3 worldOffset,
+    bool isCoverLayer = false)
     {
         if (sourceLayout == null)
         {
@@ -920,6 +925,8 @@ public partial class FpsMapGenerator : MonoBehaviour
             return;
         }
 
+        float maxYawJitterDeg = 90f * Mathf.Clamp01(coverRotationJitterPercent);
+
         for (int x = 0; x < width; x++)
         {
             for (int z = 0; z < depth; z++)
@@ -933,7 +940,24 @@ public partial class FpsMapGenerator : MonoBehaviour
                         continue;
 
                     Vector3 worldPos = GridToWorld(x, level, z) + worldOffset;
+
                     Quaternion rot = GetRotationForDirection(tile.dir);
+
+                    
+                    if (isCoverLayer && enableCoverRotationJitter && maxYawJitterDeg > 0f)
+                    {
+                        //Dont rotate spawn markers
+                        if (!IsSpawnMarker(tile.group))
+                        {
+                            int h = StableHash(lastUsedSeed, x, z, (level * 1000) ^ tile.group);
+                            int m = (h & 0x7fffffff) % 10000;
+                            float u = m / 9999f;             
+                            float t = (u * 2f) - 1f;          
+                            float yaw = t * maxYawJitterDeg;  
+
+                            rot = Quaternion.Euler(0f, yaw, 0f) * rot;
+                        }
+                    }
 
                     Instantiate(prefab, worldPos, rot, parent);
                 }
