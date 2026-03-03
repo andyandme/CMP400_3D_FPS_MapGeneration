@@ -62,14 +62,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\FpsMapGenerator\FpsMapGenerator.Cover.cs" />
+    <Compile Include="Assets\Scripts\PlayerHealth.cs" />
     <Compile Include="Assets\Scripts\MoveCamera.cs" />
     <Compile Include="Assets\Scripts\FpsMapGenerator\FpsMapGenerator.cs" />
     <Compile Include="Assets\Scripts\WeaponSystem.cs" />
     <Compile Include="Assets\Scripts\GunVisuals.cs" />
     <Compile Include="Assets\Scripts\FpsMapGenerator\FpsMapGenerator.Layout.cs" />
     <Compile Include="Assets\Scripts\FpsMapGenerator\FpsMapGenerator.Systems.cs" />
+    <Compile Include="Assets\Scripts\ProjectileDamage.cs" />
     <Compile Include="Assets\Scripts\PlayerMovement.cs" />
     <Compile Include="Assets\Scripts\PlayerSpawner.cs" />
+    <Compile Include="Assets\Scripts\IDamageable.cs" />
     <Compile Include="Assets\Scripts\PlayerCam.cs" />
     <Compile Include="Assets\Scripts\FpsMapGenerator\FpsMapGenerator.Buildings.cs" />
   </ItemGroup>

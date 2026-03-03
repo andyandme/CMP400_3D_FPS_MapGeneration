@@ -2140,6 +2140,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2875962587672813097, guid: eb6fb30532e4f0a4b8a2278f7dae041d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1570827480}
+    - targetCorrespondingSourceObject: {fileID: 2875962587672813097, guid: eb6fb30532e4f0a4b8a2278f7dae041d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1570827485}
     - targetCorrespondingSourceObject: {fileID: -5897267043292256720, guid: eb6fb30532e4f0a4b8a2278f7dae041d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 326378695}
@@ -5162,6 +5165,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1455099953}
+  - component: {fileID: 1455099954}
   m_Layer: 0
   m_Name: Player1
   m_TagString: Untagged
@@ -5185,6 +5189,20 @@ Transform:
   - {fileID: 1619613504}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1455099954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1455099952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43013580161d330469dbc7ed98caeab5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  currentHealth: 0
 --- !u!1 &1464355172
 GameObject:
   m_ObjectHideFlags: 0
@@ -6843,6 +6861,25 @@ CapsuleCollider:
   m_Height: 0.016482498
   m_Direction: 0
   m_Center: {x: -0.0017368644, y: 0.00011906028, z: -3.0732407e-18}
+--- !u!114 &1570827485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1570827476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d5929ddfc4b77647b067d6908006864, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseDamageAtSpeed: 30
+  referenceSpeed: 200
+  minimumDamage: 2
+  ricochetDamageMultiplier: 0.35
+  ricochetDotThreshold: 0.35
+  maxLifeSeconds: 10
+  ownerRoot: {fileID: 0}
 --- !u!1 &1571159762
 GameObject:
   m_ObjectHideFlags: 0
@@ -7598,6 +7635,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1716269054}
+  - component: {fileID: 1716269055}
   m_Layer: 0
   m_Name: 'Player2 '
   m_TagString: Untagged
@@ -7621,6 +7659,20 @@ Transform:
   - {fileID: 538650193}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1716269055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1716269053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43013580161d330469dbc7ed98caeab5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  currentHealth: 0
 --- !u!1 &1741715614
 GameObject:
   m_ObjectHideFlags: 0

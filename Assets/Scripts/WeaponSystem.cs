@@ -56,28 +56,24 @@ public class WeaponSystem : MonoBehaviour
             Shoot();
         }
     }
-
     void Shoot()
     {
-
         weaponCanFire = false;
 
         Quaternion spawnRot = firePoint.rotation * Quaternion.Euler(bulletRotationOffset);
         GameObject bulletClone = Instantiate(bullet, firePoint.position, spawnRot);
-        
-
 
         Transform projectileTf = bulletClone.transform.GetChild(projectileChildIndex);
         Transform casingTf = bulletClone.transform.GetChild(casingChildIndex);
 
-     
+        //Detach children
         projectileTf.SetParent(null);
         casingTf.SetParent(null);
 
+        //place the casing at ejection point
         casingTf.position = casingPoint.position;
         casingTf.rotation = casingPoint.rotation;
 
-        bulletClone.SetActive(true);
 
         Destroy(bulletClone);
 
@@ -88,10 +84,20 @@ public class WeaponSystem : MonoBehaviour
             gunVisuals.PlayShot();
 
 
-        // fire projectile
-        projRb.linearVelocity = firePoint.forward * bulletSpeed;
+        if (projRb != null)
+            projRb.linearVelocity = firePoint.forward * bulletSpeed;
 
-       
+        ProjectileDamage pd = projectileTf.GetComponent<ProjectileDamage>();
+        if (pd != null)
+        {
+
+            pd.ownerRoot = transform.root;
+
+
+            pd.referenceSpeed = bulletSpeed;
+        }
+
+        //Eject casing
         if (casingRb != null)
         {
             casingRb.linearVelocity = Vector3.zero;
@@ -106,12 +112,11 @@ public class WeaponSystem : MonoBehaviour
         if (maxBullet <= 0 && gunVisuals != null)
             gunVisuals.SetEmptySlideBack();
 
-
         StartCoroutine(CooldownTimer());
+        }
 
-    }
 
-    IEnumerator CooldownTimer()
+        IEnumerator CooldownTimer()
     {
         yield return new WaitForSeconds(firingSpeed);
         weaponCanFire = true;
