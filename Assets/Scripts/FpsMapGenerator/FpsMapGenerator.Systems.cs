@@ -756,7 +756,7 @@ public partial class FpsMapGenerator : MonoBehaviour
 
     // ---------- MANUAL MAP ----------
 
-    private void InitializeLayoutManually()
+    private void InitializeLayoutManuallyMap1()
     {
         // Level 0 (Ground)
         string[,] L0 =
@@ -797,7 +797,7 @@ public partial class FpsMapGenerator : MonoBehaviour
         InitializeLayoutFromMatrices(layout, L0, L1, L2);
     }
 
-    private void InitializeCoverLayoutManually()
+    private void InitializeCoverLayoutManuallyMap1()
     {
         string[,] C0 =
         {
@@ -834,6 +834,87 @@ public partial class FpsMapGenerator : MonoBehaviour
 
         InitializeLayoutFromMatrices(coverLayout, C0, C1, C2);
     }
+
+
+    private void InitializeLayoutManuallyMap2()
+    {
+        // Level 0 (Ground)
+        string[,] L0 =
+        {
+            { "13W","11S","11S","11S","11S","11S","13S" },
+            { "11W","10" ,"10" ,"10" ,"10" ,"10" ,"11E" },
+            { "12W","5S" ,"13N","11N","15N","11" ,"11E" },
+            { "12W","100","15E","10" ,"15W","100","12E" },
+            { "11W","11S" ,"15S","11S","13S","5N" ,"12E" },
+            { "11W","10" ,"10" ,"10" ,"10" ,"10" ,"11E" },
+            { "13N","11N","11N","11N","11N","11N","13E" },
+        };
+
+        // Level 1
+        string[,] L1 =
+        {
+            { "0" ,"0" ,"0" ,"0" ,"0" ,"0"  ,"0" },
+            { "0" ,"0" ,"0" ,"0" ,"0" ,"0"  ,"0" },
+            { "1E","20" ,"33W","31S","33S","100","1W" },
+            { "1E","30","30","20","30","30S","1W" },
+            { "1E" ,"100" ,"33","31","33E","20","1W" },
+            { "0" ,"0" ,"0" ,"0" ,"0" ,"0"  ,"0" },
+            { "0" ,"0" ,"0" ,"0" ,"0" ,"0"  ,"0" },
+        };
+
+        // Level 2
+        string[,] L2 =
+        {
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","0","0","0","0" },
+        };
+
+        InitializeLayoutFromMatrices(layout, L0, L1, L2);
+    }
+
+    private void InitializeCoverLayoutManuallyMap2()
+    {
+        string[,] C0 =
+        {
+            { "101","0","0","0","0","0","0" },
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","0","0","0","102" },
+        };
+
+        string[,] C1 =
+        {
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","2W","0","0","0" },
+            { "0","0","1","0","1","0","0" },
+            { "0","0","0","2W","0","0","0" },
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","0","0","0","0" },
+        };
+
+        string[,] C2 =
+        {
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","0","0","0","0" },
+            { "0","0","0","0","0","0","0" },
+        };
+
+        InitializeLayoutFromMatrices(coverLayout, C0, C1, C2);
+    }
+
 
     private void InitializeLayoutFromMatrices(TileCode[,,] target, string[,] level0, string[,] level1 = null, string[,] level2 = null)
     {

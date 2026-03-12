@@ -61,19 +61,29 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.1.13f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\UINavigation\HostSessionConfig.cs" />
     <Compile Include="Assets\Scripts\FpsMapGenerator\FpsMapGenerator.Cover.cs" />
-    <Compile Include="Assets\Scripts\PlayerHealth.cs" />
-    <Compile Include="Assets\Scripts\MoveCamera.cs" />
+    <Compile Include="Assets\Scripts\FPSScripts\TopHealthBarUI.cs" />
+    <Compile Include="Assets\Scripts\UINavigation\HostMapSelectionUI.cs" />
     <Compile Include="Assets\Scripts\FpsMapGenerator\FpsMapGenerator.cs" />
-    <Compile Include="Assets\Scripts\WeaponSystem.cs" />
-    <Compile Include="Assets\Scripts\GunVisuals.cs" />
+    <Compile Include="Assets\Scripts\FPSScripts\PlayerCam.cs" />
+    <Compile Include="Assets\Scripts\UINavigation\GamePlayHUDGate.cs" />
+    <Compile Include="Assets\Scripts\Networking\NetworkSpawnDirector.cs" />
+    <Compile Include="Assets\Scripts\Networking\ServerAuthoritativeMovement.cs" />
+    <Compile Include="Assets\Scripts\Networking\NetFireRelay.cs" />
+    <Compile Include="Assets\Scripts\Networking\LanBootstrap.cs" />
     <Compile Include="Assets\Scripts\FpsMapGenerator\FpsMapGenerator.Layout.cs" />
     <Compile Include="Assets\Scripts\FpsMapGenerator\FpsMapGenerator.Systems.cs" />
-    <Compile Include="Assets\Scripts\ProjectileDamage.cs" />
-    <Compile Include="Assets\Scripts\PlayerMovement.cs" />
-    <Compile Include="Assets\Scripts\PlayerSpawner.cs" />
-    <Compile Include="Assets\Scripts\IDamageable.cs" />
-    <Compile Include="Assets\Scripts\PlayerCam.cs" />
+    <Compile Include="Assets\Scripts\FPSScripts\MoveCamera.cs" />
+    <Compile Include="Assets\Scripts\FPSScripts\ProjectileDamage.cs" />
+    <Compile Include="Assets\Scripts\FPSScripts\PlayerHealth.cs" />
+    <Compile Include="Assets\Scripts\Networking\OwnerOnlyEnable.cs" />
+    <Compile Include="Assets\Scripts\FPSScripts\IDamageable.cs" />
+    <Compile Include="Assets\Scripts\FPSScripts\GunVisuals.cs" />
+    <Compile Include="Assets\Scripts\FPSScripts\WeaponSystem.cs" />
+    <Compile Include="Assets\Scripts\Networking\NetworkMapSync.cs" />
+    <Compile Include="Assets\Scripts\FPSScripts\RoundManager.cs" />
+    <Compile Include="Assets\Scripts\Networking\NetShutdownOnQuit.cs" />
     <Compile Include="Assets\Scripts\FpsMapGenerator\FpsMapGenerator.Buildings.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -1090,6 +1100,14 @@
       <HintPath>Library\ScriptAssemblies\Unity.Searcher.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Unity.Networking.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Networking.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.Netcode.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Netcode.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.RenderPipeline.Universal.ShaderLibrary">
       <HintPath>Library\ScriptAssemblies\Unity.RenderPipeline.Universal.ShaderLibrary.dll</HintPath>
       <Private>False</Private>
@@ -1140,6 +1158,10 @@
     </Reference>
     <Reference Include="Unity.RenderPipelines.GPUDriven.Runtime">
       <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.GPUDriven.Runtime.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.Netcode.Runtime">
+      <HintPath>Library\ScriptAssemblies\Unity.Netcode.Runtime.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Collections">
@@ -1210,6 +1232,10 @@
       <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Unity.Netcode.PackageChecker.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Netcode.PackageChecker.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.VisualScripting.SettingsProvider.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.SettingsProvider.Editor.dll</HintPath>
       <Private>False</Private>
@@ -1224,6 +1250,10 @@
     </Reference>
     <Reference Include="Unity.Mathematics">
       <HintPath>Library\ScriptAssemblies\Unity.Mathematics.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.Networking.Transport">
+      <HintPath>Library\ScriptAssemblies\Unity.Networking.Transport.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.RenderPipelines.Core.Editor">

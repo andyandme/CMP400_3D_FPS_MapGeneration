@@ -3,6 +3,15 @@ using UnityEngine;
 
 public partial class FpsMapGenerator : MonoBehaviour
 {
+    [SerializeField] private string roundSpawnAName = "SpawnA";
+    [SerializeField] private string roundSpawnBName = "SpawnB";
+
+    private Transform generatedSpawnA;
+    private Transform generatedSpawnB;
+
+    public Transform GeneratedSpawnA => generatedSpawnA;
+    public Transform GeneratedSpawnB => generatedSpawnB;
+
 
     private bool IsDoorGroup(int g)
     {
@@ -392,6 +401,70 @@ public partial class FpsMapGenerator : MonoBehaviour
 
         PlaceOutdoorSightlineBreakers(g, s1, s2);
         PlaceIndoorCover(g);
+
+        RefreshGeneratedRoundSpawns();
+    }
+
+    private void RefreshGeneratedRoundSpawns()
+    {
+        if (!TryGetSpawnCell(1, out Vector2Int s1))
+        {
+            Debug.LogWarning("[FpsMapGenerator] Could not find player 1 spawn marker for round spawn anchor.");
+            return;
+        }
+
+        if (!TryGetSpawnCell(2, out Vector2Int s2))
+        {
+            Debug.LogWarning("[FpsMapGenerator] Could not find player 2 spawn marker for round spawn anchor.");
+            return;
+        }
+
+        if (generatedSpawnA == null)
+        {
+            Transform existing = transform.Find(roundSpawnAName);
+            if (existing != null)
+            {
+                generatedSpawnA = existing;
+            }
+            else
+            {
+                GameObject go = new GameObject(roundSpawnAName);
+                go.transform.SetParent(transform, false);
+                generatedSpawnA = go.transform;
+            }
+        }
+
+        if (generatedSpawnB == null)
+        {
+            Transform existing = transform.Find(roundSpawnBName);
+            if (existing != null)
+            {
+                generatedSpawnB = existing;
+            }
+            else
+            {
+                GameObject go = new GameObject(roundSpawnBName);
+                go.transform.SetParent(transform, false);
+                generatedSpawnB = go.transform;
+            }
+        }
+
+        generatedSpawnA.position = GetRoundSpawnWorldPosition(s1, spawnLevel);
+        generatedSpawnB.position = GetRoundSpawnWorldPosition(s2, spawnLevel);
+
+        generatedSpawnA.rotation = Quaternion.identity;
+        generatedSpawnB.rotation = Quaternion.identity;
+
+        Debug.Log($"[FpsMapGenerator] Round spawns refreshed. A={generatedSpawnA.position} B={generatedSpawnB.position}");
+    }
+
+    private Vector3 GetRoundSpawnWorldPosition(Vector2Int cell, int level)
+    {
+        float worldX = transform.position.x + (cell.x * moduleSize); // + (moduleSize * 0.5f);
+        float worldY = transform.position.y + (level * moduleSize) + 1f;
+        float worldZ = transform.position.z + (cell.y * moduleSize); //+ (moduleSize * 0.5f);
+
+        return new Vector3(worldX, worldY, worldZ);
     }
 
     private void PlaceOutdoorSightlineBreakers(bool[,] g, Vector2Int s1, Vector2Int s2)

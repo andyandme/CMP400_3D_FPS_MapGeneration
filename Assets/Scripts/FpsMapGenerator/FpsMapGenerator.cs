@@ -22,22 +22,23 @@ public partial class FpsMapGenerator : MonoBehaviour
 
     public enum GenerationMode
     {
-        ManuallyMadeMap1, 
-        ProcedurallyGeneratedMap 
+        ManuallyMadeMap1,
+        ManuallyMadeMap2,
+        ProcedurallyGeneratedMap
     }
 
     [System.Serializable]
     public class TilePrefab
     {
-        public int groupId;          
+        public int groupId;
         public GameObject prefab;
     }
 
     [System.Serializable]
     public struct TileCode
     {
-        public int group;        
-        public Direction dir;    
+        public int group;
+        public Direction dir;
 
         public TileCode(int group, Direction dir = Direction.None)
         {
@@ -62,7 +63,7 @@ public partial class FpsMapGenerator : MonoBehaviour
     public int outdoorCubeGroupId = 100;
     [Range(2, 12)] public int maxCubeRunLength = 6;
     [Range(2, 6)] public int minCubeRunLength = 2;
-    [Range(0, 3)] public int cubeFootprintBuffer = 1; 
+    [Range(0, 3)] public int cubeFootprintBuffer = 1;
 
     //----------Grid----------
     [Header("Grid Settings")]
@@ -83,14 +84,14 @@ public partial class FpsMapGenerator : MonoBehaviour
 
     //----------BorderSmoothing----------
     [Header("Border Smoothing")]
-     int borderSmoothCornerGroupId = 19; 
+    int borderSmoothCornerGroupId = 19;
     [Range(0, 8)] public int borderSmoothingSpawnExcludeRadius = 3;
 
     //----------Rooms----------
     [Range(0, 50)] public int extraRooms = 8;
     [Range(1, 6)] public int RoomMaxSize = 4;
     public int RoomMinSize = 2;
-    [Range(0, 2)]    public int corridorThickness = 2;
+    [Range(0, 2)] public int corridorThickness = 2;
 
 
     //----------Exterior Cull----------
@@ -114,13 +115,13 @@ public partial class FpsMapGenerator : MonoBehaviour
     public bool enableBuildingVerticality = true;
     [Range(1, 10)] public int buildingUpperLevel = 1;
     public int buildingUpperFloorGroupId = 10;
-    public int stairGroupId = 5;             
+    public int stairGroupId = 5;
 
-    [Range(1, 999)] public int mediumBuildingMinCells = 18; 
-    [Range(1, 999)] public int largeBuildingMinCells = 35;  
+    [Range(1, 999)] public int mediumBuildingMinCells = 18;
+    [Range(1, 999)] public int largeBuildingMinCells = 35;
 
-    [Range(0, 6)] public int stairMinDoorDistance = 2; 
-    [Range(1, 12)] public int minStairSeparation = 6;  
+    [Range(0, 6)] public int stairMinDoorDistance = 2;
+    [Range(1, 12)] public int minStairSeparation = 6;
     [Range(0, 2)] public int stairHoleRadius = 0;
 
     //----------Debug----------
@@ -163,12 +164,12 @@ public partial class FpsMapGenerator : MonoBehaviour
 
     //----------CoverSettings----------
     [Header("Cover Placement Settings")]
-    [Range(3, 30)] public int minSightlineRun = 8;      
-    [Range(2, 12)] public int runCoverSpacing = 4;       
+    [Range(3, 30)] public int minSightlineRun = 8;
+    [Range(2, 12)] public int runCoverSpacing = 4;
     [Range(0, 6)] public int coverSpawnExcludeRadius = 3;
     [Range(0, 4)] public int coverDoorExcludeRadius = 1;
     [Range(0, 200)] public int maxOutdoorCovers = 60;
-    
+
     public bool enableCoverRotationJitter = false;
     [Range(0f, 1f)]
     public float coverRotationJitterPercent = 0.2f;
@@ -187,10 +188,10 @@ public partial class FpsMapGenerator : MonoBehaviour
 
     //----------SpawnMarkers----------
     [Header("Cover Layer Spawn Points")]
-     int player1SpawnGroupId = 101;
-     int player2SpawnGroupId = 102;
-     int spawnLevel = 0;
-     bool placeSpawnsForProcedural = true;
+    int player1SpawnGroupId = 101;
+    int player2SpawnGroupId = 102;
+    int spawnLevel = 0;
+    bool placeSpawnsForProcedural = true;
 
     //----------Seed----------
     [Header("Seed")]
@@ -205,7 +206,7 @@ public partial class FpsMapGenerator : MonoBehaviour
 
 
     //----------RunTimeData----------
-    private TileCode[,,] layout;  
+    private TileCode[,,] layout;
     private TileCode[,,] coverLayout;
     private bool[,] walkable;
 
@@ -228,6 +229,11 @@ public partial class FpsMapGenerator : MonoBehaviour
     {
         if (generateOnStart)
         {
+            if (HostSessionConfig.Instance != null && HostSessionConfig.Instance.HasActiveConfig)
+            {
+                ApplySessionMapConfig(HostSessionConfig.Instance.CurrentMap);
+            }
+
             Regenerate();
         }
     }
@@ -241,58 +247,81 @@ public partial class FpsMapGenerator : MonoBehaviour
         }
     }
 
-    public void Regenerate() // Builds a new map and cover, Will keep retrying until it passes validation then adds the spawn tiles
+    public void Regenerate() // Builds a new map and cover, will keep retrying until it passes validation then adds the spawn tiles
     {
         int attempts = 0;
         bool accepted = false;
         string lastRejectReason = "";
 
         int baseSeed = seed;
+        bool isManualMap =
+            generationMode == GenerationMode.ManuallyMadeMap1 ||
+            generationMode == GenerationMode.ManuallyMadeMap2;
 
         for (attempts = 1; attempts <= maxGenerationAttempts; attempts++)
         {
             int attemptSeed;
 
-            if (useRandomSeed)
+            if (isManualMap)
             {
-                attemptSeed = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
-                seed = attemptSeed;
+                // Manual maps must not randomise or mutate seed.
+                // Keep the configured seed value exactly as-is so host/client stay consistent.
+                attemptSeed = baseSeed;
             }
             else
             {
-                attemptSeed = baseSeed + (attempts - 1);
+                if (useRandomSeed)
+                {
+                    attemptSeed = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
+                    seed = attemptSeed;
+                }
+                else
+                {
+                    attemptSeed = baseSeed + (attempts - 1);
+                }
             }
-            
+
             lastUsedSeed = attemptSeed;
             rng = new System.Random(lastUsedSeed);
 
             AllocateLayout();
-            if (enableCoverLayer) AllocateCoverLayout();
-
+            if (enableCoverLayer)
+                AllocateCoverLayout();
 
             if (generationMode == GenerationMode.ManuallyMadeMap1)
             {
-                InitializeLayoutManually();
+                InitializeLayoutManuallyMap1();
+
                 if (enableCoverLayer)
-                    InitializeCoverLayoutManually();
+                    InitializeCoverLayoutManuallyMap1();
 
                 accepted = true;
                 break;
             }
+
+            if (generationMode == GenerationMode.ManuallyMadeMap2)
+            {
+                InitializeLayoutManuallyMap2();
+
+                if (enableCoverLayer)
+                    InitializeCoverLayoutManuallyMap2();
+
+                accepted = true;
+                break;
+            }
+
             if (generationMode == GenerationMode.ProcedurallyGeneratedMap)
             {
                 walkable = GenerateWalkablePlan();
 
-               
                 if (enableBuildings)
                 {
                     ApplyBuildingsToWalkable(walkable);
-                }   
+                }
                 else
                 {
                     buildingMask = null;
                 }
-                  
 
                 CullExteriorWalkable(walkable);
 
@@ -312,7 +341,6 @@ public partial class FpsMapGenerator : MonoBehaviour
                 {
                     PlaceDoorsForAllBuildings(walkable);
                 }
-
 
                 if (enableBuildings && enableBuildingVerticality)
                 {
@@ -342,20 +370,16 @@ public partial class FpsMapGenerator : MonoBehaviour
                     break;
 
                 if (logValidationDetails)
+                {
                     Debug.LogWarning($"[FpsMapGenerator] Reject attempt {attempts}/{maxGenerationAttempts} Seed={lastUsedSeed} Reason: {lastRejectReason}");
-
-
+                }
             }
-
         }
 
         if (!accepted)
         {
-            Debug.LogError($"[FpsMapGenerator] FAILED to generate a valid map after {maxGenerationAttempts} atempts. Last reason for rejection: {lastRejectReason} ");
+            Debug.LogError($"[FpsMapGenerator] FAILED to generate a valid map after {maxGenerationAttempts} attempts. Last reason for rejection: {lastRejectReason}");
         }
-
-
-
 
         BuildPrefabLookup();
         BuildCoverPrefabLookup();
@@ -375,12 +399,71 @@ public partial class FpsMapGenerator : MonoBehaviour
             BuildGeometry(coverLayout, coverParent, coverPrefabLookup, coverWorldOffset, true);
         }
 
-        Debug.Log($"[FpsMapGenerator] Regenerated. Seed={lastUsedSeed} (useRandomSeed={useRandomSeed})");
-
+        Debug.Log($"[FpsMapGenerator] Regenerated. Mode={generationMode} Seed={lastUsedSeed} (useRandomSeed={useRandomSeed})");
 
         int subs = (OnMapRegenerated == null) ? 0 : OnMapRegenerated.GetInvocationList().Length;
         Debug.Log($"[FpsMapGenerator] Invoking OnMapRegenerated. Subscribers={subs}");
 
         OnMapRegenerated?.Invoke();
     }
+
+    public int GetLastUsedSeed() => lastUsedSeed;
+
+    public void RegenerateExactSeed(int acceptedSeed)
+    {
+        bool prevUseRandom = useRandomSeed;
+        int prevSeed = seed;
+        int prevMaxAttempts = maxGenerationAttempts;
+
+        useRandomSeed = false;
+        seed = acceptedSeed;
+        maxGenerationAttempts = 1;
+
+        Regenerate();
+
+        useRandomSeed = prevUseRandom;
+        seed = prevSeed;
+        maxGenerationAttempts = prevMaxAttempts;
+    }
+
+
+    public void ApplySessionMapConfig(SessionMapEntry entry)
+    {
+        switch (entry.mapType)
+        {
+            case SessionMapType.ManualMap1:
+                generationMode = GenerationMode.ManuallyMadeMap1;
+                useRandomSeed = false;
+                seed = entry.seed;
+                break;
+
+            case SessionMapType.ManualMap2:
+                generationMode = GenerationMode.ManuallyMadeMap2;
+                useRandomSeed = false;
+                seed = entry.seed;
+                break;
+
+            case SessionMapType.ProceduralFixedSeed:
+                generationMode = GenerationMode.ProcedurallyGeneratedMap;
+                useRandomSeed = false;
+                seed = entry.seed;
+                break;
+
+            case SessionMapType.ProceduralRandomSeed:
+                generationMode = GenerationMode.ProcedurallyGeneratedMap;
+                useRandomSeed = true;
+                seed = entry.seed;
+                break;
+
+            default:
+                Debug.LogWarning($"[FpsMapGenerator] Unknown session map type {entry.mapType}. Falling back to ProcedurallyGeneratedMap.");
+                generationMode = GenerationMode.ProcedurallyGeneratedMap;
+                useRandomSeed = false;
+                seed = entry.seed;
+                break;
+        }
+
+        Debug.Log($"[FpsMapGenerator] Applied session map config. Type={entry.mapType}, Seed={seed}, Mode={generationMode}, useRandomSeed={useRandomSeed}");
+    }
+
 }
