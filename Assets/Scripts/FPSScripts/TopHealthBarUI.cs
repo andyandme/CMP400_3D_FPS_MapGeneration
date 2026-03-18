@@ -23,14 +23,21 @@ public class TopHealthBarsUI : MonoBehaviour
     [SerializeField] private GameObject rightPipEmpty;
     [SerializeField] private GameObject rightPipFilled;
 
-    [Header("Post-Match UI")]
-    [SerializeField] private GameObject hostNextMatchPanel;
-    [SerializeField] private Button hostNextMatchButton;
-
     [Header("Options")]
     [SerializeField] private bool autoFindPlayers = true;
     [SerializeField] private string localLabel = "YOU";
     [SerializeField] private string opponentLabel = "ENEMY";
+
+
+    [Header("Match Over UI")]
+    [SerializeField] private GameObject matchOverPanel;
+    [SerializeField] private TMP_Text matchOverTitleText;
+    [SerializeField] private TMP_Text matchOverSubtitleText;
+    [SerializeField] private GameObject hostPostMatchButtonsRoot;
+    [SerializeField] private Button nextMapButton;
+    [SerializeField] private Button rematchButton;
+    [SerializeField] private Button backToMenuButton;
+
 
     private PlayerHealth localPlayerHealth;
     private PlayerHealth opponentPlayerHealth;
@@ -38,13 +45,47 @@ public class TopHealthBarsUI : MonoBehaviour
     private ulong lastResolvedLocalId = ulong.MaxValue;
     private ulong lastResolvedOpponentId = ulong.MaxValue;
 
+    [SerializeField] private float hostPostMatchButtonDelay = 1.5f;
+
+    private bool previousMatchOver;
+    private float matchOverShownTime;
+
+
+    private void OnNextMapClicked()
+    {
+        if (RoundManager.Instance == null || NetworkManager.Singleton == null || !NetworkManager.Singleton.IsHost)
+            return;
+
+        RoundManager.Instance.StartNextMapServerRpc();
+    }
+
+    private void OnRematchClicked()
+    {
+        if (RoundManager.Instance == null || NetworkManager.Singleton == null || !NetworkManager.Singleton.IsHost)
+            return;
+
+        RoundManager.Instance.RematchCurrentMapServerRpc();
+    }
+
+    private void OnBackToMenuClicked()
+    {
+        if (RoundManager.Instance == null || NetworkManager.Singleton == null || !NetworkManager.Singleton.IsHost)
+            return;
+
+        RoundManager.Instance.ReturnToHostMenuServerRpc();
+    }
+
     private void Start()
     {
 
+        if (nextMapButton != null)
+            nextMapButton.onClick.AddListener(OnNextMapClicked);
 
-        if (hostNextMatchButton != null)
-            hostNextMatchButton.onClick.AddListener(OnHostNextMatchClicked);
+        if (rematchButton != null)
+            rematchButton.onClick.AddListener(OnRematchClicked);
 
+        if (backToMenuButton != null)
+            backToMenuButton.onClick.AddListener(OnBackToMenuClicked);
 
         ConfigureFillImage(leftFill, "LEFT");
         ConfigureFillImage(rightFill, "RIGHT");
@@ -70,8 +111,15 @@ public class TopHealthBarsUI : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (hostNextMatchButton != null)
-            hostNextMatchButton.onClick.RemoveListener(OnHostNextMatchClicked);
+
+        if (nextMapButton != null)
+            nextMapButton.onClick.RemoveListener(OnNextMapClicked);
+
+        if (rematchButton != null)
+            rematchButton.onClick.RemoveListener(OnRematchClicked);
+
+        if (backToMenuButton != null)
+            backToMenuButton.onClick.RemoveListener(OnBackToMenuClicked);
     }
 
     private void Update()
@@ -89,6 +137,20 @@ public class TopHealthBarsUI : MonoBehaviour
             if (needsResolve)
                 TryResolvePlayers();
         }
+
+        bool matchOverNow = RoundManager.Instance != null && RoundManager.Instance.MatchOver;
+
+        if (matchOverNow && !previousMatchOver)
+        {
+            matchOverShownTime = Time.unscaledTime;
+        }
+
+        if (!matchOverNow)
+        {
+            matchOverShownTime = 0f;
+        }
+
+        previousMatchOver = matchOverNow;
 
         RefreshAllUI("Update");
     }
@@ -268,7 +330,7 @@ public class TopHealthBarsUI : MonoBehaviour
 
     private void UpdatePostMatchPanel()
     {
-        if (hostNextMatchPanel == null)
+        if (matchOverPanel == null)
             return;
 
         bool show = false;
@@ -276,13 +338,45 @@ public class TopHealthBarsUI : MonoBehaviour
         if (RoundManager.Instance != null &&
             RoundManager.Instance.MatchOver &&
             NetworkManager.Singleton != null &&
-            NetworkManager.Singleton.IsHost)
+            NetworkManager.Singleton.IsListening)
         {
             show = true;
         }
 
-        hostNextMatchPanel.SetActive(show);
+        matchOverPanel.SetActive(show);
+
+        if (!show)
+        {
+            if (hostPostMatchButtonsRoot != null)
+                hostPostMatchButtonsRoot.SetActive(false);
+
+            return;
+        }
+
+        bool localWon = RoundManager.Instance.WinningClientId == NetworkManager.Singleton.LocalClientId;
+
+        if (matchOverTitleText != null)
+            matchOverTitleText.text = localWon ? "YOU WIN" : "YOU LOSE";
+
+        if (matchOverSubtitleText != null)
+        {
+            if (NetworkManager.Singleton.IsHost)
+                matchOverSubtitleText.text = "Choose the next action.";
+            else
+                matchOverSubtitleText.text = "Waiting for host...";
+        }
+
+        if (hostPostMatchButtonsRoot != null)
+        {
+            bool hostCanClick =
+                NetworkManager.Singleton.IsHost &&
+                (Time.unscaledTime - matchOverShownTime) >= hostPostMatchButtonDelay;
+
+            hostPostMatchButtonsRoot.SetActive(hostCanClick);
+        }
     }
+
+
 
     private void OnHostNextMatchClicked()
     {
@@ -324,7 +418,5 @@ public class TopHealthBarsUI : MonoBehaviour
         if (rightPipFilled != null)
             rightPipFilled.SetActive(false);
 
-        if (hostNextMatchPanel != null)
-            hostNextMatchPanel.SetActive(false);
     }
 }

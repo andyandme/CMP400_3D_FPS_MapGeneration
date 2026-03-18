@@ -7,6 +7,7 @@ public class NetFireRelay : NetworkBehaviour
     public Transform firePoint;
     public GameObject bulletVisualPrefab;
     public float visualSpeed = 200f;
+    public Vector3 bulletVisualRotationOffset;
 
     public void OwnerFired()
     {
@@ -33,7 +34,8 @@ public class NetFireRelay : NetworkBehaviour
 
         if (bulletVisualPrefab != null)
         {
-            var go = Instantiate(bulletVisualPrefab, origin, Quaternion.LookRotation(forward));
+            Quaternion rot = Quaternion.LookRotation(forward) * Quaternion.Euler(0f, 90f, 0f);
+            var go = Instantiate(bulletVisualPrefab, origin, rot);
             var rb = go.GetComponent<Rigidbody>();
             if (rb != null) rb.linearVelocity = forward * visualSpeed;
             Destroy(go, 3f);

@@ -169,6 +169,12 @@ public class ServerAuthoritativeMovement : NetworkBehaviour
     {
         if (!IsOwner) return;
 
+        if (!NetworkMapSync.IsGameplayReady())
+            return;
+
+        if (RoundManager.Instance != null && RoundManager.Instance.MatchOver)
+            return;
+
         if (!IsMatchReady())
             return;
 
@@ -327,6 +333,13 @@ public class ServerAuthoritativeMovement : NetworkBehaviour
     {
         if (!IsServer) return;
 
+        if (!NetworkMapSync.IsGameplayReady() || (RoundManager.Instance != null && RoundManager.Instance.MatchOver))
+        {
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            return;
+        }
+
         if (!IsMatchReady())
         {
             rb.linearVelocity = Vector3.zero;
@@ -337,7 +350,7 @@ public class ServerAuthoritativeMovement : NetworkBehaviour
         if (playerHealth != null && !playerHealth.isDead.Value && transform.position.y <= killY)
         {
             playerHealth.TakeDamage(playerHealth.currentHealth.Value, "KillPlane");
-            //Debug.Log($"[SrvMove] Kill plane triggered for owner={OwnerClientId} at y={transform.position.y:0.00}");
+            Debug.Log($"[SrvMove] Kill plane triggered for owner={OwnerClientId} at y={transform.position.y:0.00}");
             return;
         }
 

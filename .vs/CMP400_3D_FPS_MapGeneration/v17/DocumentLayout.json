@@ -3,6 +3,58 @@
   "WorkspaceRootPath": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\fpsscripts\\tophealthbarui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\fpsscripts\\tophealthbarui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\networking\\netfirerelay.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\networking\\netfirerelay.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\networking\\networkspawndirector.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\networking\\networkspawndirector.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\networking\\networkmapsync.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\networking\\networkmapsync.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\fpsscripts\\roundmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\fpsscripts\\roundmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\networking\\serverauthoritativemovement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\networking\\serverauthoritativemovement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|c:\\unityprojects\\cmp400_3d_fps_mapgeneration\\assets\\scripts\\uinavigation\\hostmapselectionui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\uinavigation\\hostmapselectionui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\fpsscripts\\weaponsystem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\fpsscripts\\weaponsystem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\fpsscripts\\playercam.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\fpsscripts\\playercam.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\uinavigation\\hostsessionconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\uinavigation\\hostsessionconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\uinavigation\\gameplayhudgate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\uinavigation\\gameplayhudgate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\fpsscripts\\movecamera.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\fpsscripts\\movecamera.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\networking\\lanbootstrap.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\networking\\lanbootstrap.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\fpsmapgenerator\\fpsmapgenerator.systems.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\fpsmapgenerator\\fpsmapgenerator.systems.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -23,32 +75,12 @@
       "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\fpsmapgenerator\\fpsmapgenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\fpsscripts\\weaponsystem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\fpsscripts\\weaponsystem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\fpsscripts\\tophealthbarui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\fpsscripts\\tophealthbarui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\fpsscripts\\roundmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\fpsscripts\\roundmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\fpsscripts\\projectiledamage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\fpsscripts\\projectiledamage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\fpsscripts\\playerhealth.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\fpsscripts\\playerhealth.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\fpsscripts\\playercam.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\fpsscripts\\playercam.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\fpsscripts\\movecamera.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\fpsscripts\\movecamera.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\fpsscripts\\idamageable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -59,48 +91,16 @@
       "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\fpsscripts\\gunvisuals.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\uinavigation\\gameplayhudgate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\uinavigation\\gameplayhudgate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\networking\\serverauthoritativemovement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\networking\\serverauthoritativemovement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\networking\\owneronlyenable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\networking\\owneronlyenable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\networking\\networkspawndirector.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\networking\\networkspawndirector.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\networking\\networkmapsync.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\networking\\networkmapsync.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\networking\\netshutdownonquit.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\networking\\netshutdownonquit.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\networking\\netfirerelay.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\networking\\netfirerelay.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\networking\\lanbootstrap.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\networking\\lanbootstrap.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\uinavigation\\hostsessionconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\uinavigation\\hostsessionconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\uinavigation\\hostmapselectionui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{029A0484-97A0-49E7-4399-2447EA464BA3}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\uinavigation\\hostmapselectionui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\assets\\scripts\\networking\\netdebug.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\scripts\\networking\\netdebug.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\Networking\\NetDebug.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\Networking\\NetDebug.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\FPSScripts\\PlayerMovement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -202,7 +202,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 33,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Document",
@@ -241,13 +241,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 8,
               "Title": "PlayerCam.cs",
               "DocumentMoniker": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\FPSScripts\\PlayerCam.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\FPSScripts\\PlayerCam.cs",
               "ToolTip": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\FPSScripts\\PlayerCam.cs",
               "RelativeToolTip": "Assets\\Scripts\\FPSScripts\\PlayerCam.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACoAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-12T13:59:36.751Z",
               "EditorCaption": ""
@@ -260,72 +260,72 @@
               "RelativeDocumentMoniker": "Assets\\Scripts\\FPSScripts\\MoveCamera.cs",
               "ToolTip": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\FPSScripts\\MoveCamera.cs",
               "RelativeToolTip": "Assets\\Scripts\\FPSScripts\\MoveCamera.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-12T13:59:22.618Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 4,
               "Title": "RoundManager.cs",
               "DocumentMoniker": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\FPSScripts\\RoundManager.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\FPSScripts\\RoundManager.cs",
               "ToolTip": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\FPSScripts\\RoundManager.cs",
               "RelativeToolTip": "Assets\\Scripts\\FPSScripts\\RoundManager.cs",
-              "ViewState": "AgIAAFkBAAAAAAAAAAAAAJkBAAABAAAAAAAAAA==",
+              "ViewState": "AgIAALoAAAAAAAAAAAAuwPQAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-11T23:44:14.158Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 0,
               "Title": "TopHealthBarUI.cs",
               "DocumentMoniker": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\FPSScripts\\TopHealthBarUI.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\FPSScripts\\TopHealthBarUI.cs",
               "ToolTip": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\FPSScripts\\TopHealthBarUI.cs",
               "RelativeToolTip": "Assets\\Scripts\\FPSScripts\\TopHealthBarUI.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEkBAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAEoBAAAAAAAAAAAkwHgBAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-11T23:43:44.273Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 10,
               "Title": "GamePlayHUDGate.cs",
               "DocumentMoniker": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\UINavigation\\GamePlayHUDGate.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\UINavigation\\GamePlayHUDGate.cs",
               "ToolTip": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\UINavigation\\GamePlayHUDGate.cs",
               "RelativeToolTip": "Assets\\Scripts\\UINavigation\\GamePlayHUDGate.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEEAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAkwBoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-11T18:27:34.132Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 6,
               "Title": "HostMapSelectionUI.cs",
               "DocumentMoniker": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\UINavigation\\HostMapSelectionUI.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\UINavigation\\HostMapSelectionUI.cs",
               "ToolTip": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\UINavigation\\HostMapSelectionUI.cs",
               "RelativeToolTip": "Assets\\Scripts\\UINavigation\\HostMapSelectionUI.cs",
-              "ViewState": "AgIAAFcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAADYAAAAAAAAAAAAAAFwAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-11T16:58:22.768Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 9,
               "Title": "HostSessionConfig.cs",
               "DocumentMoniker": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\UINavigation\\HostSessionConfig.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\UINavigation\\HostSessionConfig.cs",
               "ToolTip": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\UINavigation\\HostSessionConfig.cs",
               "RelativeToolTip": "Assets\\Scripts\\UINavigation\\HostSessionConfig.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAGIAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAEMAAAAAAAAAAAAkwGcAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-11T16:57:23.452Z",
               "EditorCaption": ""
@@ -340,12 +340,11 @@
               "RelativeToolTip": "Library\\PackageCache\\com.unity.netcode.gameobjects@837011a5fcd5\\Runtime\\Logging\\NetworkLog.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACUAAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-10T18:32:22.69Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-10T18:32:22.69Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 21,
               "Title": "GunVisuals.cs",
               "DocumentMoniker": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\FPSScripts\\GunVisuals.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\FPSScripts\\GunVisuals.cs",
@@ -353,12 +352,11 @@
               "RelativeToolTip": "Assets\\Scripts\\FPSScripts\\GunVisuals.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAKQAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-10T18:15:55.52Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-10T18:15:55.52Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 20,
               "Title": "IDamageable.cs",
               "DocumentMoniker": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\FPSScripts\\IDamageable.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\FPSScripts\\IDamageable.cs",
@@ -366,12 +364,11 @@
               "RelativeToolTip": "Assets\\Scripts\\FPSScripts\\IDamageable.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-10T18:15:22.617Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-10T18:15:22.617Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 19,
               "Title": "PlayerHealth.cs",
               "DocumentMoniker": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\FPSScripts\\PlayerHealth.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\FPSScripts\\PlayerHealth.cs",
@@ -379,12 +376,11 @@
               "RelativeToolTip": "Assets\\Scripts\\FPSScripts\\PlayerHealth.cs",
               "ViewState": "AgIAADYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-10T18:14:53.004Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-10T18:14:53.004Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 18,
               "Title": "ProjectileDamage.cs",
               "DocumentMoniker": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\FPSScripts\\ProjectileDamage.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\FPSScripts\\ProjectileDamage.cs",
@@ -392,18 +388,17 @@
               "RelativeToolTip": "Assets\\Scripts\\FPSScripts\\ProjectileDamage.cs",
               "ViewState": "AgIAADMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-10T18:14:26.143Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-10T18:14:26.143Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "WeaponSystem.cs",
               "DocumentMoniker": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\FPSScripts\\WeaponSystem.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\FPSScripts\\WeaponSystem.cs",
               "ToolTip": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\FPSScripts\\WeaponSystem.cs",
               "RelativeToolTip": "Assets\\Scripts\\FPSScripts\\WeaponSystem.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAK4AAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAACQAAAAAAAAAAAAAAEwAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-10T18:14:05.683Z",
               "EditorCaption": ""
@@ -421,33 +416,33 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 5,
               "Title": "ServerAuthoritativeMovement.cs",
               "DocumentMoniker": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\Networking\\ServerAuthoritativeMovement.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Networking\\ServerAuthoritativeMovement.cs",
               "ToolTip": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\Networking\\ServerAuthoritativeMovement.cs",
               "RelativeToolTip": "Assets\\Scripts\\Networking\\ServerAuthoritativeMovement.cs",
-              "ViewState": "AgIAAGUBAAAAAAAAAAAvwH8BAAA6AAAAAAAAAA==",
+              "ViewState": "AgIAAGwBAAAAAAAAAAAkwJoBAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-05T20:02:14.382Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 1,
               "Title": "NetFireRelay.cs",
               "DocumentMoniker": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\Networking\\NetFireRelay.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Networking\\NetFireRelay.cs",
               "ToolTip": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\Networking\\NetFireRelay.cs",
               "RelativeToolTip": "Assets\\Scripts\\Networking\\NetFireRelay.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAApAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACUAAABCAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-05T19:06:19.814Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 22,
               "Title": "OwnerOnlyEnable.cs",
               "DocumentMoniker": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\Networking\\OwnerOnlyEnable.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Networking\\OwnerOnlyEnable.cs",
@@ -455,8 +450,7 @@
               "RelativeToolTip": "Assets\\Scripts\\Networking\\OwnerOnlyEnable.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-05T18:37:48.672Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-05T18:37:48.672Z"
             },
             {
               "$type": "Document",
@@ -472,7 +466,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 23,
               "Title": "NetShutdownOnQuit.cs",
               "DocumentMoniker": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\Networking\\NetShutdownOnQuit.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Networking\\NetShutdownOnQuit.cs",
@@ -480,8 +474,7 @@
               "RelativeToolTip": "Assets\\Scripts\\Networking\\NetShutdownOnQuit.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-05T04:19:35.046Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-05T04:19:35.046Z"
             },
             {
               "$type": "Document",
@@ -493,47 +486,45 @@
               "RelativeToolTip": "Assets\\Scripts\\Networking\\NetDebug.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-05T03:29:19.828Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-05T03:29:19.828Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 3,
               "Title": "NetworkMapSync.cs",
               "DocumentMoniker": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\Networking\\NetworkMapSync.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Networking\\NetworkMapSync.cs",
               "ToolTip": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\Networking\\NetworkMapSync.cs",
               "RelativeToolTip": "Assets\\Scripts\\Networking\\NetworkMapSync.cs",
-              "ViewState": "AgIAADYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAIkAAAAAAAAAAAAkwLcAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-05T03:21:48.492Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 2,
               "Title": "NetworkSpawnDirector.cs",
               "DocumentMoniker": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\Networking\\NetworkSpawnDirector.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Networking\\NetworkSpawnDirector.cs",
               "ToolTip": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\Networking\\NetworkSpawnDirector.cs",
               "RelativeToolTip": "Assets\\Scripts\\Networking\\NetworkSpawnDirector.cs",
-              "ViewState": "AgIAANgAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAF0AAAAAAAAAAAAuwHoAAABeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-05T02:35:02.596Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 12,
               "Title": "LanBootstrap.cs",
               "DocumentMoniker": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\Networking\\LanBootstrap.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Networking\\LanBootstrap.cs",
               "ToolTip": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\Networking\\LanBootstrap.cs",
               "RelativeToolTip": "Assets\\Scripts\\Networking\\LanBootstrap.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAeAAAAAAAAAA==",
+              "ViewState": "AgIAAEgAAAAAAAAAAAAAAGwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-05T02:20:57.037Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-05T02:20:57.037Z"
             },
             {
               "$type": "Document",
@@ -608,7 +599,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 15,
               "Title": "FpsMapGenerator.Cover.cs",
               "DocumentMoniker": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\FpsMapGenerator\\FpsMapGenerator.Cover.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\FpsMapGenerator\\FpsMapGenerator.Cover.cs",
@@ -616,25 +607,23 @@
               "RelativeToolTip": "Assets\\Scripts\\FpsMapGenerator\\FpsMapGenerator.Cover.cs",
               "ViewState": "AgIAAMMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-15T16:46:05.42Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-15T16:46:05.42Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 13,
               "Title": "FpsMapGenerator.Systems.cs",
               "DocumentMoniker": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\FpsMapGenerator\\FpsMapGenerator.Systems.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\FpsMapGenerator\\FpsMapGenerator.Systems.cs",
               "ToolTip": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\FpsMapGenerator\\FpsMapGenerator.Systems.cs",
               "RelativeToolTip": "Assets\\Scripts\\FpsMapGenerator\\FpsMapGenerator.Systems.cs",
-              "ViewState": "AgIAADgEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAADYEAAAAAAAAAABBwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-11T18:18:30.027Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-11T18:18:30.027Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 14,
               "Title": "FpsMapGenerator.Layout.cs",
               "DocumentMoniker": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\FpsMapGenerator\\FpsMapGenerator.Layout.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\FpsMapGenerator\\FpsMapGenerator.Layout.cs",
@@ -642,12 +631,11 @@
               "RelativeToolTip": "Assets\\Scripts\\FpsMapGenerator\\FpsMapGenerator.Layout.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAGABAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-10T17:06:06.681Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-10T17:06:06.681Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 16,
               "Title": "FpsMapGenerator.Buildings.cs",
               "DocumentMoniker": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\FpsMapGenerator\\FpsMapGenerator.Buildings.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\FpsMapGenerator\\FpsMapGenerator.Buildings.cs",
@@ -655,12 +643,11 @@
               "RelativeToolTip": "Assets\\Scripts\\FpsMapGenerator\\FpsMapGenerator.Buildings.cs",
               "ViewState": "AgIAAGcBAAAAAAAAAAAAAIIBAAAlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-10T16:53:43.464Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-10T16:53:43.464Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 17,
               "Title": "FpsMapGenerator.cs",
               "DocumentMoniker": "C:\\UnityProjects\\CMP400_3D_FPS_MapGeneration\\Assets\\Scripts\\FpsMapGenerator\\FpsMapGenerator.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\FpsMapGenerator\\FpsMapGenerator.cs",
@@ -668,8 +655,7 @@
               "RelativeToolTip": "Assets\\Scripts\\FpsMapGenerator\\FpsMapGenerator.cs",
               "ViewState": "AgIAAI4AAAAAAAAAAAAAANQBAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-10T16:53:41.686Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-10T16:53:41.686Z"
             },
             {
               "$type": "Document",
@@ -787,8 +773,7 @@
               "RelativeToolTip": "Library\\PackageCache\\com.unity.render-pipelines.universal@dcd8a2aecf3e\\Shaders\\Lit.shader",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002777|",
-              "WhenOpened": "2025-11-19T20:17:30.972Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-19T20:17:30.972Z"
             },
             {
               "$type": "Document",

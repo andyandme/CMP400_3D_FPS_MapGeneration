@@ -7,6 +7,9 @@ public class MoveCamera : MonoBehaviour
 
     private void Update()
     {
+        if (!NetworkMapSync.IsGameplayReady())
+            return;
+
         transform.position = cameraPosition.position;
     }
 

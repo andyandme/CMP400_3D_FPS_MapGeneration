@@ -6,6 +6,8 @@ public class GameplayHUDGate : MonoBehaviour
     [Header("Panels")]
     [SerializeField] private GameObject gameplayHUD;
     [SerializeField] private GameObject mainMenuPanel;
+    [SerializeField] private GameObject connectToClientPanel;
+    [SerializeField] private GameObject connectToHostPanel;
     [SerializeField] private GameObject hostModePanel;
     [SerializeField] private GameObject waitingForClientPanel;
     [SerializeField] private GameObject waitingForHostPanel;
@@ -24,16 +26,11 @@ public class GameplayHUDGate : MonoBehaviour
             return;
 
         NetworkManager nm = NetworkManager.Singleton;
-        if (nm == null)
-            return;
-
-        if (!nm.IsListening)
+        if (nm == null || !nm.IsListening)
             return;
 
         int connectedCount = nm.ConnectedClientsList != null ? nm.ConnectedClientsList.Count : 0;
         bool localPlayerReady = nm.LocalClient != null && nm.LocalClient.PlayerObject != null;
-
-        Debug.Log($"[GameplayHUDGate] IsListening={nm.IsListening} ConnectedCount={connectedCount} LocalPlayerReady={localPlayerReady}");
 
         if (connectedCount < 2)
             return;
@@ -41,10 +38,13 @@ public class GameplayHUDGate : MonoBehaviour
         if (!localPlayerReady)
             return;
 
+        if (!NetworkMapSync.IsGameplayReady())
+            return;
+
         ShowGameplayOnly();
         gameplayShown = true;
 
-        Debug.Log("[GameplayHUDGate] Both players connected and local player exists. Gameplay HUD enabled.");
+        Debug.Log("[GameplayHUDGate] Gameplay HUD enabled after network + map sync readiness.");
     }
 
     public void ResetGate()
@@ -58,6 +58,8 @@ public class GameplayHUDGate : MonoBehaviour
     private void ShowGameplayOnly()
     {
         if (mainMenuPanel != null) mainMenuPanel.SetActive(false);
+        if (connectToClientPanel != null) connectToClientPanel.SetActive(false);
+        if (connectToHostPanel != null) connectToHostPanel.SetActive(false);
         if (hostModePanel != null) hostModePanel.SetActive(false);
         if (waitingForClientPanel != null) waitingForClientPanel.SetActive(false);
         if (waitingForHostPanel != null) waitingForHostPanel.SetActive(false);

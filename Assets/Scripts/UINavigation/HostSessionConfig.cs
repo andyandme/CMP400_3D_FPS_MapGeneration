@@ -9,6 +9,16 @@ public enum SessionMapType
     ProceduralRandomSeed
 }
 
+public enum SessionFlowMode
+{
+    None,
+    ParticipantTesting,
+    RandomMap,
+    SeedSelection
+}
+
+
+
 [System.Serializable]
 public struct SessionMapEntry
 {
@@ -24,6 +34,7 @@ public struct SessionMapEntry
 
 public class HostSessionConfig : MonoBehaviour
 {
+    public SessionFlowMode CurrentFlowMode { get; private set; } = SessionFlowMode.None;
     public static HostSessionConfig Instance;
 
     [Header("Participant Testing Seeds")]
@@ -65,17 +76,21 @@ public class HostSessionConfig : MonoBehaviour
         CurrentMapIndex = 0;
         CurrentMap = participantTestingOrder[0];
         HasActiveConfig = true;
+        CurrentFlowMode = SessionFlowMode.ParticipantTesting;
 
         Debug.Log($"[HostSessionConfig] Participant Testing configured. First map={CurrentMap.mapType}, seed={CurrentMap.seed}");
     }
 
     public void ConfigureRandomMap()
     {
-        CurrentMap = new SessionMapEntry(SessionMapType.ProceduralRandomSeed);
+        int chosenSeed = Random.Range(int.MinValue, int.MaxValue);
+
+        CurrentMap = new SessionMapEntry(SessionMapType.ProceduralFixedSeed, chosenSeed);
         CurrentMapIndex = 0;
         HasActiveConfig = true;
+        CurrentFlowMode = SessionFlowMode.RandomMap;
 
-        Debug.Log("[HostSessionConfig] Random Map configured.");
+        Debug.Log($"[HostSessionConfig] Random Map configured. Host chose seed={chosenSeed}");
     }
 
     public void ConfigureSeedSelection(int seed)
@@ -83,6 +98,7 @@ public class HostSessionConfig : MonoBehaviour
         CurrentMap = new SessionMapEntry(SessionMapType.ProceduralFixedSeed, seed);
         CurrentMapIndex = 0;
         HasActiveConfig = true;
+        CurrentFlowMode = SessionFlowMode.SeedSelection;
 
         Debug.Log($"[HostSessionConfig] Seed Selection configured. Seed={seed}");
     }

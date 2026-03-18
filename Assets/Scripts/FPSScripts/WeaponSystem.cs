@@ -44,6 +44,12 @@ public class WeaponSystem : MonoBehaviour
         if (ownerNO != null && !ownerNO.IsOwner)
             return;
 
+        if (!NetworkMapSync.IsGameplayReady())
+            return;
+
+        if (RoundManager.Instance != null && RoundManager.Instance.MatchOver)
+            return;
+
         if (!IsMatchReady())
             return;
 

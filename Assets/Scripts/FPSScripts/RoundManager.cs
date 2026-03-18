@@ -59,6 +59,216 @@ public class RoundManager : NetworkBehaviour
     public bool MatchOver => matchOver.Value;
     public bool SpawnsSwapped => spawnsSwapped.Value;
 
+    private NetworkVariable<ulong> winningClientId = new NetworkVariable<ulong>(
+    ulong.MaxValue,
+    NetworkVariableReadPermission.Everyone,
+    NetworkVariableWritePermission.Server
+);
+
+    public ulong WinningClientId => winningClientId.Value;
+
+    private void PublishAndStartCurrentConfiguredMatch()
+    {
+        NetworkMapSync sync = FindFirstObjectByType<NetworkMapSync>();
+        if (sync == null)
+        {
+            Debug.LogError("[RoundManager] No NetworkMapSync found.");
+            return;
+        }
+
+        ResetMatchStateOnly();
+
+        sync.SetGameplayReadyForAll(false);
+        sync.PublishCurrentHostConfig();
+
+        Debug.Log("[RoundManager] Published configured match and waiting for all clients to finish map apply.");
+    }
+
+    public void OnMapSyncReadyForMatchStartServer()
+    {
+        if (!IsServer)
+            return;
+
+        ResetBestOf3StateForNewMatchServer();
+
+        if (!ResolvePlayers())
+        {
+            Debug.LogWarning("[RoundManager] Could not resolve players after map sync.");
+            return;
+        }
+
+        if (!ResolveSpawns())
+        {
+            Debug.LogWarning("[RoundManager] Could not resolve spawns after map sync.");
+            return;
+        }
+
+        ResetPlayersForFreshMatch();
+
+        Debug.Log("[RoundManager] Map sync complete for all players. Fresh BO3 match started.");
+    }
+
+
+
+    private void ResetPlayersForFreshMatch()
+    {
+        if (!ResolvePlayers())
+        {
+            Debug.LogWarning("[RoundManager] Could not resolve players for fresh match.");
+            return;
+        }
+
+        if (!ResolveSpawns())
+        {
+            Debug.LogWarning("[RoundManager] Could not resolve spawns for fresh match.");
+            return;
+        }
+
+        ResetPlayerForRound(player1, spawnA);
+        ResetPlayerForRound(player2, spawnB);
+    }
+
+    private bool ConfigureNextMapFromFlowMode()
+    {
+        if (HostSessionConfig.Instance == null)
+        {
+            Debug.LogWarning("[RoundManager] No HostSessionConfig instance found.");
+            return false;
+        }
+
+        switch (HostSessionConfig.Instance.CurrentFlowMode)
+        {
+            case SessionFlowMode.ParticipantTesting:
+                return HostSessionConfig.Instance.MoveToNextParticipantTestingMap();
+
+            case SessionFlowMode.RandomMap:
+                HostSessionConfig.Instance.ConfigureRandomMap();
+                return true;
+
+            case SessionFlowMode.SeedSelection:
+                // Keep exact same selected seed/map for "next map" in seed-selection mode.
+                return HostSessionConfig.Instance.HasActiveConfig;
+
+            default:
+                return false;
+        }
+    }
+
+
+
+    [ClientRpc]
+    private void SetGameplayReadyClientRpc(bool ready)
+    {
+        if (NetworkMapSync.Instance != null)
+            NetworkMapSync.Instance.SetLocalGameplayReady(ready);
+    }
+
+    [ClientRpc]
+    private void ReturnPlayersToMenuStateClientRpc()
+    {
+        GameplayHUDGate gate = FindFirstObjectByType<GameplayHUDGate>();
+        if (gate != null)
+            gate.ResetGate();
+
+        if (NetworkMapSync.Instance != null)
+            NetworkMapSync.Instance.SetLocalGameplayReady(false);
+
+        if (HostMapSelectionUI.Instance == null)
+            return;
+
+        if (NetworkManager.Singleton != null && NetworkManager.Singleton.IsHost)
+            HostMapSelectionUI.Instance.ShowHostModeAfterMatchReturn();
+        else
+            HostMapSelectionUI.Instance.ShowWaitingForHostAfterMatchReturn();
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void StartNextMapServerRpc(ServerRpcParams rpcParams = default)
+    {
+        if (!IsServer)
+            return;
+
+        ulong sender = rpcParams.Receive.SenderClientId;
+        if (sender != NetworkManager.ServerClientId)
+        {
+            Debug.LogWarning($"[RoundManager] Non-host client {sender} tried to start next map.");
+            return;
+        }
+
+        if (!ConfigureNextMapFromFlowMode())
+        {
+            Debug.LogWarning("[RoundManager] Could not configure next map from current flow mode.");
+            return;
+        }
+
+        PublishAndStartCurrentConfiguredMatch();
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void RematchCurrentMapServerRpc(ServerRpcParams rpcParams = default)
+    {
+        if (!IsServer)
+            return;
+
+        ulong sender = rpcParams.Receive.SenderClientId;
+        if (sender != NetworkManager.ServerClientId)
+        {
+            Debug.LogWarning($"[RoundManager] Non-host client {sender} tried to request rematch.");
+            return;
+        }
+
+        PublishAndStartCurrentConfiguredMatch();
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void ReturnToHostMenuServerRpc(ServerRpcParams rpcParams = default)
+    {
+        if (!IsServer)
+            return;
+
+        ulong sender = rpcParams.Receive.SenderClientId;
+        if (sender != NetworkManager.ServerClientId)
+        {
+            Debug.LogWarning($"[RoundManager] Non-host client {sender} tried to return to menu.");
+            return;
+        }
+
+        ResetBestOf3StateForNewMatchServer();
+
+        NetworkMapSync sync = FindFirstObjectByType<NetworkMapSync>();
+        if (sync != null)
+            sync.SetGameplayReadyForAll(false);
+
+        ReturnPlayersToMenuStateClientRpc();
+
+        Debug.Log("[RoundManager] Returned both players to host/client menu state with BO3 reset.");
+    }
+
+    private void ResetMatchStateOnly()
+    {
+        ResetBestOf3StateForNewMatchServer();
+    }
+
+
+    public void ResetBestOf3StateForNewMatchServer()
+    {
+        if (!IsServer)
+        {
+            Debug.LogWarning("[RoundManager] ResetBestOf3StateForNewMatchServer called on non-server.");
+            return;
+        }
+
+        player1RoundWins.Value = 0;
+        player2RoundWins.Value = 0;
+        roundOver.Value = false;
+        matchOver.Value = false;
+        spawnsSwapped.Value = false;
+        nextRoundRoutineRunning = false;
+        winningClientId.Value = ulong.MaxValue;
+
+        Debug.Log("[RoundManager] Best-of-3 state reset for a fresh match.");
+    }
+
     public override void OnNetworkSpawn()
     {
         if (Instance != null && Instance != this)
@@ -243,13 +453,15 @@ public class RoundManager : NetworkBehaviour
         if (player1RoundWins.Value >= winsNeededToWinMatch || player2RoundWins.Value >= winsNeededToWinMatch)
         {
             matchOver.Value = true;
-            Debug.Log("[RoundManager] Match over.");
+            winningClientId.Value = winner.OwnerClientId;
+            Debug.Log($"[RoundManager] Match over. WinningClientId={winningClientId.Value}");
             return;
         }
 
         if (!nextRoundRoutineRunning)
             StartCoroutine(StartNextRoundAfterDelay());
     }
+
 
     private IEnumerator StartNextRoundAfterDelay()
     {

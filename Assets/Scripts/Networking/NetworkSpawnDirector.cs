@@ -12,7 +12,6 @@ public class NetworkSpawnDirector : MonoBehaviour
     public float yOffset = 4.5f;
     public float waitTimeoutSeconds = 15f;
 
-    private bool placedOnce = false;
     private Coroutine _startRoutine;
 
     private void Awake()
@@ -137,10 +136,6 @@ public class NetworkSpawnDirector : MonoBehaviour
         TeleportClientToSpawn(0, 1);
         TeleportClientToSpawn(1, 2);
 
-        yield return new WaitForSeconds(0.2f);
-
-        TeleportClientToSpawn(0, 1);
-        TeleportClientToSpawn(1, 2);
 
         Debug.Log("[NetworkSpawnDirector] MatchStart hostId=0 otherId=1");
 
