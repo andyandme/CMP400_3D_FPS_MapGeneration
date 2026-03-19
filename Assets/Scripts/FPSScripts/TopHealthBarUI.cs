@@ -378,13 +378,13 @@ public class TopHealthBarsUI : MonoBehaviour
 
 
 
-    private void OnHostNextMatchClicked()
-    {
-        if (RoundManager.Instance == null || NetworkManager.Singleton == null || !NetworkManager.Singleton.IsHost)
-            return;
+    //private void OnHostNextMatchClicked()
+    //{
+    //    if (RoundManager.Instance == null || NetworkManager.Singleton == null || !NetworkManager.Singleton.IsHost)
+    //        return;
 
-        RoundManager.Instance.StartNextMatchServerRpc();
-    }
+    //    RoundManager.Instance.StartNextMatchServerRpc();
+    //}
 
     private void ClearBarsIfMissing()
     {

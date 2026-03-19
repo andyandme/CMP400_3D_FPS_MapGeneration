@@ -406,8 +406,8 @@ public class ServerAuthoritativeMovement : NetworkBehaviour
             rb.linearVelocity = new Vector3(limited.x, rb.linearVelocity.y, limited.z);
         }
 
-        if (logServerApply)
-            Debug.Log($"[SrvMove] SERVER apply owner={OwnerClientId} grounded={grounded} speed={speed:0.0} flat={flat.magnitude:0.00} vel={rb.linearVelocity}");
+        //if (logServerApply)
+        //    Debug.Log($"[SrvMove] SERVER apply owner={OwnerClientId} grounded={grounded} speed={speed:0.0} flat={flat.magnitude:0.00} vel={rb.linearVelocity}");
     }
 
     private void ApplyCrouchServer(bool crouch)

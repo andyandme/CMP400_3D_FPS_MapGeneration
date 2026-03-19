@@ -409,13 +409,13 @@ public partial class FpsMapGenerator : MonoBehaviour
     {
         if (!TryGetSpawnCell(1, out Vector2Int s1))
         {
-            Debug.LogWarning("[FpsMapGenerator] Could not find player 1 spawn marker for round spawn anchor.");
+            Debug.LogWarning("[FpsMapGenerator] Could not find player 1 spawn marker (101) for round spawn anchor.");
             return;
         }
 
         if (!TryGetSpawnCell(2, out Vector2Int s2))
         {
-            Debug.LogWarning("[FpsMapGenerator] Could not find player 2 spawn marker for round spawn anchor.");
+            Debug.LogWarning("[FpsMapGenerator] Could not find player 2 spawn marker (102) for round spawn anchor.");
             return;
         }
 
@@ -449,20 +449,23 @@ public partial class FpsMapGenerator : MonoBehaviour
             }
         }
 
-        generatedSpawnA.position = GetRoundSpawnWorldPosition(s1, spawnLevel);
-        generatedSpawnB.position = GetRoundSpawnWorldPosition(s2, spawnLevel);
+        Vector3 worldA = GetRoundSpawnWorldPosition(s1, spawnLevel);
+        Vector3 worldB = GetRoundSpawnWorldPosition(s2, spawnLevel);
+
+        generatedSpawnA.position = worldA;
+        generatedSpawnB.position = worldB;
 
         generatedSpawnA.rotation = Quaternion.identity;
         generatedSpawnB.rotation = Quaternion.identity;
 
-        Debug.Log($"[FpsMapGenerator] Round spawns refreshed. A={generatedSpawnA.position} B={generatedSpawnB.position}");
+        Debug.Log($"[FpsMapGenerator] Round spawns refreshed. A cell={s1} pos={worldA} | B cell={s2} pos={worldB}");
     }
 
     private Vector3 GetRoundSpawnWorldPosition(Vector2Int cell, int level)
     {
-        float worldX = transform.position.x + (cell.x * moduleSize); // + (moduleSize * 0.5f);
-        float worldY = transform.position.y + (level * moduleSize) + 1f;
-        float worldZ = transform.position.z + (cell.y * moduleSize); //+ (moduleSize * 0.5f);
+        float worldX = cell.x * moduleSize;
+        float worldY = (level * moduleSize) + 1f;
+        float worldZ = cell.y * moduleSize;
 
         return new Vector3(worldX, worldY, worldZ);
     }

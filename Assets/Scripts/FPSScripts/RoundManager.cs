@@ -7,9 +7,6 @@ public class RoundManager : NetworkBehaviour
 {
     public static RoundManager Instance;
 
-    [Header("Generated Spawn Names")]
-    [SerializeField] private string spawnAName = "SpawnA";
-    [SerializeField] private string spawnBName = "SpawnB";
 
     [Header("Round Settings")]
     [SerializeField] private float nextRoundDelay = 3f;
@@ -314,8 +311,8 @@ public class RoundManager : NetworkBehaviour
         if (NetworkManager.Singleton.ConnectedClientsList == null || NetworkManager.Singleton.ConnectedClientsList.Count < 2)
             return false;
 
-        PlayerHealth first = null;
-        PlayerHealth second = null;
+        PlayerHealth hostPlayer = null;
+        PlayerHealth remotePlayer = null;
 
         foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
         {
@@ -329,38 +326,29 @@ public class RoundManager : NetworkBehaviour
             if (ph == null || !ph.IsSpawned)
                 continue;
 
-            if (first == null)
-                first = ph;
-            else if (second == null)
-                second = ph;
+            if (client.ClientId == NetworkManager.ServerClientId)
+                hostPlayer = ph;
+            else
+                remotePlayer = ph;
         }
 
-        if (first == null || second == null)
+        if (hostPlayer == null || remotePlayer == null)
         {
-            Debug.LogWarning("[RoundManager] ResolvePlayers failed. Could not find 2 spawned PlayerHealth components from connected clients.");
+            Debug.LogWarning("[RoundManager] ResolvePlayers failed. Could not find host and remote player.");
             return false;
         }
 
-        if (first.OwnerClientId < second.OwnerClientId)
-        {
-            player1 = first;
-            player2 = second;
-        }
-        else
-        {
-            player1 = second;
-            player2 = first;
-        }
+        player1 = hostPlayer;
+        player2 = remotePlayer;
 
         Debug.Log(
             $"[RoundManager] ResolvePlayers success. " +
-            $"player1={player1.name} owner={player1.OwnerClientId} " +
-            $"player2={player2.name} owner={player2.OwnerClientId}"
+            $"player1(host)={player1.name} owner={player1.OwnerClientId} " +
+            $"player2(client)={player2.name} owner={player2.OwnerClientId}"
         );
 
         return true;
     }
-
 
     private bool ResolveSpawns()
     {

@@ -372,21 +372,6 @@ public partial class FpsMapGenerator : MonoBehaviour
         return candidates;
     }
 
-    //private void GetComponentBounds(List<Vector2Int> comp, out int minX, out int maxX, out int minZ, out int maxZ) //Finds the bounding box size of a building footprint
-    //{
-    //    minX = int.MaxValue; maxX = int.MinValue;
-    //    minZ = int.MaxValue; maxZ = int.MinValue;
-
-    //    for (int i = 0; i < comp.Count; i++)
-    //    {
-    //        int x = comp[i].x;
-    //        int z = comp[i].y;
-    //        if (x < minX) minX = x;
-    //        if (x > maxX) maxX = x;
-    //        if (z < minZ) minZ = z;
-    //        if (z > maxZ) maxZ = z;
-    //    }
-    //}
 
     private int GetStairCountForBuilding(List<Vector2Int> comp) // Decides if it needs 0 or 2 staircases
     {

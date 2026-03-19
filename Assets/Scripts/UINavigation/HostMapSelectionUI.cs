@@ -190,36 +190,9 @@ public class HostMapSelectionUI : MonoBehaviour
             return false;
         }
 
-        if (hostPortInputField == null)
-        {
-            Debug.LogError("[HostMapSelectionUI] Host port input field is not assigned.");
-            return false;
-        }
-
-        string raw = hostPortInputField.text.Trim();
-
-        if (string.IsNullOrEmpty(raw))
-        {
-            Debug.LogWarning("[HostMapSelectionUI] Host port input is empty.");
-            return false;
-        }
-
-        if (!ushort.TryParse(raw, out ushort parsedPort))
-        {
-            Debug.LogWarning($"[HostMapSelectionUI] Invalid host port entered: '{raw}'");
-            return false;
-        }
-
-        if (parsedPort == 0)
-        {
-            Debug.LogWarning("[HostMapSelectionUI] Port 0 is not valid for manual entry.");
-            return false;
-        }
-
-        lanBootstrap.SetPort(parsedPort);
+        lanBootstrap.SetPort(7777);
         return true;
     }
-
     private bool TryApplyClientPortFromInput()
     {
         if (lanBootstrap == null)
@@ -228,33 +201,7 @@ public class HostMapSelectionUI : MonoBehaviour
             return false;
         }
 
-        if (clientPortInputField == null)
-        {
-            Debug.LogError("[HostMapSelectionUI] Client port input field is not assigned.");
-            return false;
-        }
-
-        string raw = clientPortInputField.text.Trim();
-
-        if (string.IsNullOrEmpty(raw))
-        {
-            Debug.LogWarning("[HostMapSelectionUI] Client port input is empty.");
-            return false;
-        }
-
-        if (!ushort.TryParse(raw, out ushort parsedPort))
-        {
-            Debug.LogWarning($"[HostMapSelectionUI] Invalid client port entered: '{raw}'");
-            return false;
-        }
-
-        if (parsedPort == 0)
-        {
-            Debug.LogWarning("[HostMapSelectionUI] Port 0 is not valid for manual entry.");
-            return false;
-        }
-
-        lanBootstrap.SetPort(parsedPort);
+        lanBootstrap.SetPort(7777);
         return true;
     }
 
@@ -291,12 +238,7 @@ public class HostMapSelectionUI : MonoBehaviour
             return;
 
         string localIp = lanBootstrap.GetLocalIPv4();
-
-        string portText = "7777";
-        if (hostPortInputField != null && !string.IsNullOrWhiteSpace(hostPortInputField.text))
-            portText = hostPortInputField.text.Trim();
-
-        hostConnectionInfoText.text = $"Your IP: {localIp}\nPort: {portText}";
+        hostConnectionInfoText.text = $"Your IP: {localIp}\nPort: 7777";
     }
 
     public void OnParticipantTestingPressed()

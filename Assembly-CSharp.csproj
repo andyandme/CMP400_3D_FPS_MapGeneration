@@ -68,7 +68,6 @@
     <Compile Include="Assets\Scripts\FpsMapGenerator\FpsMapGenerator.cs" />
     <Compile Include="Assets\Scripts\FPSScripts\PlayerCam.cs" />
     <Compile Include="Assets\Scripts\UINavigation\GamePlayHUDGate.cs" />
-    <Compile Include="Assets\Scripts\Networking\NetworkSpawnDirector.cs" />
     <Compile Include="Assets\Scripts\Networking\ServerAuthoritativeMovement.cs" />
     <Compile Include="Assets\Scripts\Networking\NetFireRelay.cs" />
     <Compile Include="Assets\Scripts\Networking\LanBootstrap.cs" />
@@ -84,6 +83,7 @@
     <Compile Include="Assets\Scripts\Networking\NetworkMapSync.cs" />
     <Compile Include="Assets\Scripts\FPSScripts\RoundManager.cs" />
     <Compile Include="Assets\Scripts\Networking\NetShutdownOnQuit.cs" />
+    <Compile Include="Assets\Scripts\Networking\PlayerPreMatchVisibility.cs" />
     <Compile Include="Assets\Scripts\FpsMapGenerator\FpsMapGenerator.Buildings.cs" />
   </ItemGroup>
   <ItemGroup>

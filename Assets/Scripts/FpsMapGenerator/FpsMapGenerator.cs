@@ -65,6 +65,20 @@ public partial class FpsMapGenerator : MonoBehaviour
     [Range(2, 6)] public int minCubeRunLength = 2;
     [Range(0, 3)] public int cubeFootprintBuffer = 1;
 
+
+
+    [Header("Manual Map Dimensions")]
+    public int manualMap1Width = 16;
+    public int manualMap1Depth = 10;
+
+    public int manualMap2Width = 7;
+    public int manualMap2Depth = 7;
+
+    [Header("Procedural Dimensions")]
+    public int proceduralWidth = 24;
+    public int proceduralDepth = 24;
+
+
     //----------Grid----------
     [Header("Grid Settings")]
     public int width = 24;
@@ -247,6 +261,30 @@ public partial class FpsMapGenerator : MonoBehaviour
         }
     }
 
+    private void ApplyDimensionsForCurrentMode()
+    {
+        switch (generationMode)
+        {
+            case GenerationMode.ManuallyMadeMap1:
+                width = manualMap1Width;
+                depth = manualMap1Depth;
+                break;
+
+            case GenerationMode.ManuallyMadeMap2:
+                width = manualMap2Width;
+                depth = manualMap2Depth;
+                break;
+
+            case GenerationMode.ProcedurallyGeneratedMap:
+            default:
+                width = proceduralWidth;
+                depth = proceduralDepth;
+                break;
+        }
+
+        Debug.Log($"[FpsMapGenerator] Dimensions applied for mode {generationMode}: width={width}, depth={depth}");
+    }
+
     public void Regenerate() // Builds a new map and cover, will keep retrying until it passes validation then adds the spawn tiles
     {
         int attempts = 0;
@@ -283,6 +321,8 @@ public partial class FpsMapGenerator : MonoBehaviour
 
             lastUsedSeed = attemptSeed;
             rng = new System.Random(lastUsedSeed);
+
+            ApplyDimensionsForCurrentMode();
 
             AllocateLayout();
             if (enableCoverLayer)
@@ -397,6 +437,7 @@ public partial class FpsMapGenerator : MonoBehaviour
         if (enableCoverLayer)
         {
             BuildGeometry(coverLayout, coverParent, coverPrefabLookup, coverWorldOffset, true);
+            RefreshGeneratedRoundSpawns();
         }
 
         Debug.Log($"[FpsMapGenerator] Regenerated. Mode={generationMode} Seed={lastUsedSeed} (useRandomSeed={useRandomSeed})");
