@@ -116,6 +116,27 @@ public class HostMapSelectionUI : MonoBehaviour
         }
     }
 
+    private void StartConfiguredMatchFromHostMenu()
+    {
+        if (NetworkManager.Singleton == null || !NetworkManager.Singleton.IsHost)
+        {
+            Debug.LogError("[HostMapSelectionUI] Cannot start configured match because this instance is not the host.");
+            return;
+        }
+
+        ShowOnly(waitingForClientPanel);
+
+        NetworkMapSync sync = FindFirstObjectByType<NetworkMapSync>();
+        if (sync == null)
+        {
+            Debug.LogError("[HostMapSelectionUI] No NetworkMapSync found.");
+            return;
+        }
+
+        sync.PublishCurrentHostConfig();
+
+        Debug.Log("[HostMapSelectionUI] Host published configured match from host menu.");
+    }
 
     public void OnHostPressed()
     {
@@ -250,20 +271,9 @@ public class HostMapSelectionUI : MonoBehaviour
         }
 
         HostSessionConfig.Instance.ConfigureParticipantTesting();
-
-        NetworkMapSync sync = FindFirstObjectByType<NetworkMapSync>();
-        if (sync == null)
-        {
-            Debug.LogError("[HostMapSelectionUI] No NetworkMapSync instance found.");
-            return;
-        }
-
-        sync.PublishCurrentHostConfig();
-
-        ShowOnly(waitingForClientPanel);
-
-        Debug.Log("[HostMapSelectionUI] Participant Testing selected and published.");
+        StartConfiguredMatchFromHostMenu();
     }
+
     public void OnRandomMapPressed()
     {
         if (HostSessionConfig.Instance == null)
@@ -273,19 +283,7 @@ public class HostMapSelectionUI : MonoBehaviour
         }
 
         HostSessionConfig.Instance.ConfigureRandomMap();
-
-        NetworkMapSync sync = FindFirstObjectByType<NetworkMapSync>();
-        if (sync == null)
-        {
-            Debug.LogError("[HostMapSelectionUI] No NetworkMapSync instance found.");
-            return;
-        }
-
-        sync.PublishCurrentHostConfig();
-
-        ShowOnly(waitingForClientPanel);
-
-        Debug.Log("[HostMapSelectionUI] Random Map selected and published.");
+        StartConfiguredMatchFromHostMenu();
     }
 
     public void OnSeedSelectionPressed()
@@ -302,26 +300,38 @@ public class HostMapSelectionUI : MonoBehaviour
             return;
         }
 
-        if (!int.TryParse(seedInputField.text, out int parsedSeed))
+        string raw = seedInputField.text.Trim();
+
+        if (string.IsNullOrWhiteSpace(raw))
         {
-            Debug.LogWarning("[HostMapSelectionUI] Invalid seed entered.");
+            Debug.LogWarning("[HostMapSelectionUI] Seed/manual map input is empty.");
+            return;
+        }
+
+        string lowered = raw.ToLowerInvariant();
+
+        if (lowered == "manual1" || lowered == "map1" || lowered == "manualmap1")
+        {
+            HostSessionConfig.Instance.ConfigureManualMap1();
+            StartConfiguredMatchFromHostMenu();
+            return;
+        }
+
+        if (lowered == "manual2" || lowered == "map2" || lowered == "manualmap2")
+        {
+            HostSessionConfig.Instance.ConfigureManualMap2();
+            StartConfiguredMatchFromHostMenu();
+            return;
+        }
+
+        if (!int.TryParse(raw, out int parsedSeed))
+        {
+            Debug.LogWarning("[HostMapSelectionUI] Invalid seed/manual map entry. Use a number, 'manual1', or 'manual2'.");
             return;
         }
 
         HostSessionConfig.Instance.ConfigureSeedSelection(parsedSeed);
-
-        NetworkMapSync sync = FindFirstObjectByType<NetworkMapSync>();
-        if (sync == null)
-        {
-            Debug.LogError("[HostMapSelectionUI] No NetworkMapSync instance found.");
-            return;
-        }
-
-        sync.PublishCurrentHostConfig();
-
-        ShowOnly(waitingForClientPanel);
-
-        Debug.Log($"[HostMapSelectionUI] Seed Selection configured and published. Seed={parsedSeed}");
+        StartConfiguredMatchFromHostMenu();
     }
 
 

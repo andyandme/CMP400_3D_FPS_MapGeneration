@@ -1268,6 +1268,7 @@ GameObject:
   - component: {fileID: 175703587}
   - component: {fileID: 175703588}
   - component: {fileID: 175703589}
+  - component: {fileID: 175703590}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -1373,6 +1374,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22d2a4c56426de8468228741c868cc0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &175703590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 175703585}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 233cab880d3484244ae1583aeafe4035, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lineOfSightCheckInterval: 0.1
+  eyeHeight: 2
+  lineOfSightMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!1 &175970612
 GameObject:
   m_ObjectHideFlags: 0
@@ -2261,8 +2279,8 @@ MonoBehaviour:
   cubeFootprintBuffer: 1
   manualMap1Width: 16
   manualMap1Depth: 10
-  manualMap2Width: 7
-  manualMap2Depth: 7
+  manualMap2Width: 15
+  manualMap2Depth: 15
   proceduralWidth: 24
   proceduralDepth: 24
   width: 18
@@ -5466,7 +5484,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1610008678
 RectTransform:
   m_ObjectHideFlags: 0

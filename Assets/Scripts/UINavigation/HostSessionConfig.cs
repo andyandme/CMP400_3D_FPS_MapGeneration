@@ -93,6 +93,26 @@ public class HostSessionConfig : MonoBehaviour
         Debug.Log($"[HostSessionConfig] Random Map configured. Host chose seed={chosenSeed}");
     }
 
+    public void ConfigureManualMap1()
+    {
+        CurrentMap = new SessionMapEntry(SessionMapType.ManualMap1, 0);
+        CurrentMapIndex = 0;
+        HasActiveConfig = true;
+        CurrentFlowMode = SessionFlowMode.SeedSelection;
+
+        Debug.Log("[HostSessionConfig] Manual Map 1 configured.");
+    }
+
+    public void ConfigureManualMap2()
+    {
+        CurrentMap = new SessionMapEntry(SessionMapType.ManualMap2, 0);
+        CurrentMapIndex = 0;
+        HasActiveConfig = true;
+        CurrentFlowMode = SessionFlowMode.SeedSelection;
+
+        Debug.Log("[HostSessionConfig] Manual Map 2 configured.");
+    }
+
     public void ConfigureSeedSelection(int seed)
     {
         CurrentMap = new SessionMapEntry(SessionMapType.ProceduralFixedSeed, seed);

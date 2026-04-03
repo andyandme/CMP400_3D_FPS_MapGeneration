@@ -75,6 +75,7 @@
     <Compile Include="Assets\Scripts\FpsMapGenerator\FpsMapGenerator.Systems.cs" />
     <Compile Include="Assets\Scripts\FPSScripts\MoveCamera.cs" />
     <Compile Include="Assets\Scripts\FPSScripts\ProjectileDamage.cs" />
+    <Compile Include="Assets\Scripts\Networking\MatchDataLogger.cs" />
     <Compile Include="Assets\Scripts\FPSScripts\PlayerHealth.cs" />
     <Compile Include="Assets\Scripts\Networking\OwnerOnlyEnable.cs" />
     <Compile Include="Assets\Scripts\FPSScripts\IDamageable.cs" />

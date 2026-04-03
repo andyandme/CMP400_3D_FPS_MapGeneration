@@ -100,7 +100,19 @@ public class RoundManager : NetworkBehaviour
             return;
         }
 
+        Debug.Log(
+            $"[RoundManager] Final spawn assignment before fresh match start: " +
+            $"player1={player1.name} owner={player1.OwnerClientId} -> {(spawnsSwapped.Value ? spawnB.name : spawnA.name)}, " +
+            $"player2={player2.name} owner={player2.OwnerClientId} -> {(spawnsSwapped.Value ? spawnA.name : spawnB.name)}"
+        );
+
         ResetPlayersForFreshMatch();
+
+        MatchDataLogger logger = FindFirstObjectByType<MatchDataLogger>();
+        if (logger != null)
+            logger.BeginMatch(player1, player2);
+        else
+            Debug.LogWarning("[RoundManager] No MatchDataLogger found when beginning match.");
 
         Debug.Log("[RoundManager] Map sync complete for all players. Fresh BO3 match started.");
     }
@@ -431,6 +443,12 @@ public class RoundManager : NetworkBehaviour
 
         roundOver.Value = true;
 
+        MatchDataLogger logger = FindFirstObjectByType<MatchDataLogger>();
+        if (logger != null)
+            logger.CompleteRound(winner, loser);
+        else
+            Debug.LogWarning("[RoundManager] No MatchDataLogger found when completing round.");
+
         if (winner == player1)
             player1RoundWins.Value++;
         else if (winner == player2)
@@ -442,6 +460,10 @@ public class RoundManager : NetworkBehaviour
         {
             matchOver.Value = true;
             winningClientId.Value = winner.OwnerClientId;
+
+            if (logger != null)
+                logger.CompleteMatch(winner, loser);
+
             Debug.Log($"[RoundManager] Match over. WinningClientId={winningClientId.Value}");
             return;
         }
@@ -501,6 +523,12 @@ public class RoundManager : NetworkBehaviour
 
         roundOver.Value = false;
         nextRoundRoutineRunning = false;
+
+        MatchDataLogger logger = FindFirstObjectByType<MatchDataLogger>();
+        if (logger != null)
+            logger.BeginRound();
+        else
+            Debug.LogWarning("[RoundManager] No MatchDataLogger found when beginning next round.");
 
         Debug.Log("[RoundManager] Next round started.");
     }
