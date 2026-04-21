@@ -1,0 +1,17 @@
+----- MATCH RESULT -----
+Timestamp: 2026-04-21 17:53:35
+MapType: ProceduralFixedSeed
+MapSeed: -1172941446
+Round1LengthSeconds: 57.688
+Round1FirstEngagementSeconds: 33.464
+Round2LengthSeconds: 16.658
+Round2FirstEngagementSeconds: 13.986
+AverageRoundLengthSeconds: 37.173
+AverageFirstEngagementSeconds: 23.725
+WinnerSide: Client (Player 2)
+WinnerName: Player(Clone)
+WinnerOwnerClientId: 1
+LoserSide: Host (Player 1)
+LoserName: Player(Clone)
+LoserOwnerClientId: 0
+
