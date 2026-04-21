@@ -169,9 +169,9 @@ public partial class FpsMapGenerator : MonoBehaviour
             case Direction.West: leftOf = Direction.South; rightOf = Direction.North; break;
         }
 
-        if (keptWall == leftOf) return doorCornerLeftWallGroupId;   // 151
+        if (keptWall == leftOf) return doorCornerLeftWallGroupId;   //151
         if (keptWall == rightOf) return doorCornerRightWallGroupId;  // 152
-        return doorGroupId; // fallback
+        return doorGroupId;
     }
 
 
@@ -373,7 +373,7 @@ public partial class FpsMapGenerator : MonoBehaviour
     }
 
 
-    private int GetStairCountForBuilding(List<Vector2Int> comp) // Decides if it needs 0 or 2 staircases
+    private int GetStairCountForBuilding(List<Vector2Int> comp) //Decides if it needs 0 or 2 staircases
     {
         if (comp == null) return 0;
 
